@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO" monitorInterval="30">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %c{1.} - %msg%n" />
+        </Console>
+        <RollingFile name="MyFile" fileName="all.log" filePattern="all.log.%i">
+            <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %c{1.} - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="5 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console" />
+            <AppenderRef ref="MyFile"/>
+        </Root>
+        <Logger name="org.eclipse.jetty" level="warn" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="MyFile"/>
+        </Logger>
+        <Logger name="spark" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="MyFile"/>
+        </Logger>
+        <Logger name="javazoom" level="warn" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="MyFile"/>
+        </Logger>
+    </Loggers>
+</Configuration>
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<Configuration status="WARN">-->
+    <!--<Appenders>-->
+        <!--<Console name="Console" target="SYSTEM_OUT">-->
+            <!--<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
+        <!--</Console>-->
+        <!--<RollingFile name="RollingFileAppender" fileName="logs/app.log"-->
+                     <!--filePattern="logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">-->
+            <!--<PatternLayout>-->
+                <!--<Pattern>%d [%t] %p %c - %m%n</Pattern>-->
+            <!--</PatternLayout>-->
+            <!--<Policies>-->
+                <!--<OnStartupTriggeringPolicy />-->
+                <!--<TimeBasedTriggeringPolicy />-->
+                <!--<SizeBasedTriggeringPolicy size="50 MB" />-->
+            <!--</Policies>-->
+            <!--<DefaultRolloverStrategy max="20" />-->
+        <!--</RollingFile>-->
+    <!--</Appenders>-->
+
+    <!--<Loggers>-->
+        <!--<Root level="INFO">-->
+            <!--<AppenderRef ref="Console"/>-->
+        <!--</Root>-->
+    <!--</Loggers>-->
+<!--</Configuration>-->
