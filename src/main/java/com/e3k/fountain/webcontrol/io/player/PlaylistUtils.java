@@ -39,13 +39,12 @@ public final class PlaylistUtils {
             String song = findSongInFolder(fileItem);
             if (song != null) {
                 String fullPathToSong = mkFullPath(musicFolderPath, fileItem.getName(), song);
-                result[techNum] = new PlaylistItem(techNum, song, fullPathToSong);
+                result[techNum] = new PlaylistItem(techNum, song, new File(fullPathToSong));
                 isEmpty = false;
             }
         }
         if (isEmpty) {
-            String fullPath = PlaylistUtils.class.getClassLoader().getResource("fountain_sound.mp3").getFile();
-            result[0] = new PlaylistItem(0, "Звук фонтана", fullPath);
+            result[0] = new PlaylistItem(0, "Звук фонтана", new File("fountain_sound.mp3"), false);
         }
         return result;
     }
@@ -65,7 +64,7 @@ public final class PlaylistUtils {
             return null;
         }
         String fullPathToSong = mkFullPath(musicFolderPath, String.valueOf(realNum), song);
-        return new PlaylistItem(techNum, song, fullPathToSong);
+        return new PlaylistItem(techNum, song, new File(fullPathToSong));
     }
 
     private static String findSongInFolder(File fileItem) {

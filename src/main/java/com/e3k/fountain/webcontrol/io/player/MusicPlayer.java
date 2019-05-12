@@ -4,7 +4,6 @@ import com.e3k.fountain.webcontrol.config.PropertiesManager;
 import javazoom.jlgui.basicplayer.*;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -90,17 +89,22 @@ public enum MusicPlayer implements BasicPlayerListener {
         pliIndex = pliIndex % PlaylistUtils.PLAYLIST_SIZE;
         log.debug("Switched to item {}", pliIndex);
         final PlaylistItem item = playlist[pliIndex];
-        if (item != null && item.fullPathToSong != null) {
+        if (item != null && item.songFile != null) {
             try {
                 log.debug("Started playing {}", item);
-                audioPlayer.open(new File(item.fullPathToSong));
+                if (item.isExternal) {
+                    audioPlayer.open(item.songFile);
+                } else {
+                    ClassLoader classLoader = getClass().getClassLoader();
+                    audioPlayer.open(classLoader.getResourceAsStream(item.songFile.getName()));
+                }
                 audioPlayer.play();
                 audioPlayer.setGain((double) volume / 100);
                 // Set Pan (-1.0 to 1.0).
                 audioPlayer.setPan(0.0);
                 nowPlaying = pliIndex;
                 PropertiesManager.ONE.setLastPlayedItem(nowPlaying);
-            } catch (Exception e) {
+            } catch (BasicPlayerException e) {
                 log.error("Failed playing item " + pliIndex, e);
                 playItem(pliIndex + 1);
             }
