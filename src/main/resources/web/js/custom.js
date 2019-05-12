@@ -264,7 +264,8 @@ $(document).ready(function () {
     // ENABLE/DISABLE SWITCH/ALARM CONTROLS //
     //////////////////////////////////////////
     function changeFountainState(autoMode) {
-        $('#fountainState').bootstrapToggle(autoMode ? 'disable' : 'enable')
+        $('#fountainState')
+            // .bootstrapToggle(autoMode ? 'disable' : 'enable')
             .parent().parent().css('opacity', autoMode ? 0.3 : 1.0);
         $('#fountainAlarmStart').parent().css('opacity', !autoMode ? 0.3 : 1.0);
         $('#fountainAlarmEnd').parent().css('opacity', !autoMode ? 0.3 : 1.0);
@@ -282,8 +283,9 @@ $(document).ready(function () {
         }
     }
     function changeLightState(autoMode) {
-        $('#lightState').bootstrapToggle(autoMode ? 'disable' : 'enable').parent().parent()
-            .css('opacity', autoMode ? 0.3 : 1.0);
+        $('#lightState')
+            // .bootstrapToggle(autoMode ? 'disable' : 'enable')
+            .parent().parent().css('opacity', autoMode ? 0.3 : 1.0);
         $('#lightAlarmStart').parent().css('opacity', !autoMode ? 0.3 : 1.0);
         $('#lightAlarmEnd').parent().css('opacity', !autoMode ? 0.3 : 1.0);
         if (autoMode) {
@@ -300,8 +302,9 @@ $(document).ready(function () {
         }
     }
     function changeSoundState(autoMode) {
-        $('#soundState').bootstrapToggle(autoMode ? 'disable' : 'enable').parent().parent()
-            .css('opacity', autoMode ? 0.3 : 1.0);
+        $('#soundState')
+            // .bootstrapToggle(autoMode ? 'disable' : 'enable')
+            .parent().parent().css('opacity', autoMode ? 0.3 : 1.0);
         $('#soundAlarmStart').parent().css('opacity', !autoMode ? 0.3 : 1.0);
         $('#soundAlarmEnd').parent().css('opacity', !autoMode ? 0.3 : 1.0);
         if (autoMode) {
