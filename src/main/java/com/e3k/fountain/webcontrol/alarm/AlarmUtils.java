@@ -23,7 +23,7 @@ final class AlarmUtils {
         throw new AssertionError();
     }
 
-    static SwitchableDevice getDeviceByAlarmType(AlarmType alarmType) {
+    static SwitchableDevice getAffectedDeviceByAlarmType(AlarmType alarmType) {
         if (alarmType == fountainAlarmStart || alarmType == fountainAlarmEnd) {
             return FountainDevice.ONE;
         } else if (alarmType == lightAlarmStart || alarmType == lightAlarmEnd) {

@@ -30,11 +30,7 @@ public enum MusicPlayer implements BasicPlayerListener {
 
     public synchronized void startPlaylistWhereLeft() {
         int lastPlayedItem = PropertiesManager.ONE.getLastPlayedItem();
-        int startPlayItem = lastPlayedItem + 1;
-        if (startPlayItem >= PlaylistUtils.PLAYLIST_SIZE) {
-            startPlayItem = 0;
-        }
-        playItem(startPlayItem);
+        playItem(lastPlayedItem + 1);
     }
 
     public synchronized void reloadPlaylistItem(int techNum) {
@@ -61,12 +57,12 @@ public enum MusicPlayer implements BasicPlayerListener {
 
     public synchronized void changeVolume(int volume) {
         log.info("Changing volume {}", volume);
+        PropertiesManager.ONE.setVolume(volume);
         try {
             if (isPlaying()) {
                 audioPlayer.setGain((double) volume / 100);
             }
             this.volume = volume;
-            PropertiesManager.ONE.setVolume(volume);
         } catch (BasicPlayerException e) {
             log.error("Failed changing volume", e);
         }

@@ -9,7 +9,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j
 public final class PlaylistUtils {
 
-    public static final int PLAYLIST_SIZE = 20;
+    static final int PLAYLIST_SIZE = 20;
 
     private PlaylistUtils() {
         throw new AssertionError();
@@ -19,7 +19,7 @@ public final class PlaylistUtils {
         return techNum >= 0 && techNum < PLAYLIST_SIZE;
     }
 
-    public static PlaylistItem[] getPlaylist() {
+    static PlaylistItem[] getPlaylist() {
         String musicFolderPath = "music";
         File folder = new File(musicFolderPath);
         if (!folder.exists()) {

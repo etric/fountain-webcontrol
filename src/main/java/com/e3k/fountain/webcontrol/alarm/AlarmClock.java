@@ -39,6 +39,8 @@ public enum AlarmClock {
             reSyncDeviceStateWithAlarms(FountainDevice.ONE);
             reSyncDeviceStateWithAlarms(SoundDevice.ONE);
             reSyncDeviceStateWithAlarms(LightDevice.ONE);
+            //TODO maybe do not create AlarmManager each time,
+            // but keep it running with single dummy Alarm ?
             alarmManager = new AlarmManager();
             try {
                 for (Map.Entry<AlarmType, AlarmEntry> entry : alarms.entrySet()) {
@@ -72,7 +74,7 @@ public enum AlarmClock {
                 return;
             }
 
-            final SwitchableDevice device = getDeviceByAlarmType(alarmType);
+            final SwitchableDevice device = getAffectedDeviceByAlarmType(alarmType);
             final boolean oldIsAlarmActive = isAlarmActive(device.getType());
 
             alarmManager.removeAlarm(alarm);

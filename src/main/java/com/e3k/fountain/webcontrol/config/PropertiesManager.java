@@ -22,6 +22,8 @@ import static java.util.Objects.requireNonNull;
 @Slf4j
 public enum PropertiesManager {
 
+    //TODO replace with Apache Commons Configuration w/ autoSave option
+
     ONE;
 
     private static final String CONTROL_MODE = "controlMode";

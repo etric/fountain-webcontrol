@@ -14,11 +14,7 @@ public class EntryPoint {
         // start web server
         WebServer.bootstrap();
 
-//        if (args != null && args.length > 0) {
-//            Utils.D = args[0].toLowerCase().equals("d");
-//        }
-
-        log.info("Bootstrapping AlarmClock state and Devices switches...");
+        log.info("Bootstrapping AlarmClock state and Devices state...");
         if (ControlMode.auto == PropertiesManager.ONE.getControlMode()) {
             AlarmClock.ONE.turnOn();
         } else {
