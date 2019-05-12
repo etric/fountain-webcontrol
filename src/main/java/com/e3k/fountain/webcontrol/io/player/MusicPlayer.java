@@ -52,14 +52,17 @@ public enum MusicPlayer implements BasicPlayerListener {
     }
 
     public int getCurrentPlayingItem() {
-        log.debug("Getting current playing item");
         return nowPlaying;
+    }
+
+    public boolean isPlaying() {
+        return audioPlayer.getStatus() == BasicPlayer.PLAYING;
     }
 
     public synchronized void changeVolume(int volume) {
         log.info("Changing volume {}", volume);
         try {
-            if (audioPlayer.getStatus() == BasicPlayer.PLAYING) {
+            if (isPlaying()) {
                 audioPlayer.setGain((double) volume / 100);
             }
             this.volume = volume;
@@ -70,7 +73,6 @@ public enum MusicPlayer implements BasicPlayerListener {
     }
 
     public int getVolume() {
-        log.info("Getting volume");
         return volume;
     }
 
@@ -114,11 +116,7 @@ public enum MusicPlayer implements BasicPlayerListener {
     @Override
     public void stateUpdated(BasicPlayerEvent event) {
         if (event.getCode() == BasicPlayerEvent.EOM) {
-            if (nowPlaying < playlist.length - 1) {
-                playItem(nowPlaying + 1);
-            } else {
-                playItem(0);
-            }
+            playItem(nowPlaying + 1);
         }
     }
 

@@ -36,6 +36,8 @@ toastr.options = {
 
 $(document).ready(function () {
 
+    var alarmPreviousValues = {};
+
     /////////////////////
     // ALARM TIME PICKERS
     /////////////////////
@@ -50,6 +52,7 @@ $(document).ready(function () {
             success: function (response) {
                 console.log('response: ' + response);
                 picker.setValue(response);
+                alarmPreviousValues[alarmType] = response;
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
@@ -99,11 +102,8 @@ $(document).ready(function () {
         if (fromTime >= toTime) {
             toastr.warning('Время Начала должно быть раньше Конца!');
             $(this).val(alarmPreviousValues[alarmName]);
-            //TODO revert to old value!
             return;
         }
-
-        //TODO validate BEFORE/AFTER
         console.log('Updating ' + alarmName + ' with value ' + newValue);
         var localAlarmName = eng2rus(alarmName);
         $.ajax({
@@ -122,15 +122,6 @@ $(document).ready(function () {
             }
         });
     }
-
-    var alarmPreviousValues = {
-        'fountainAlarmStart': $('#fountainAlarmStart').val(),
-        'fountainAlarmEnd': $('#fountainAlarmEnd').val(),
-        'soundAlarmStart': $('#soundAlarmStart').val(),
-        'soundAlarmEnd': $('#soundAlarmEnd').val(),
-        'lightAlarmStart': $('#lightAlarmStart').val(),
-        'lightAlarmEnd': $('#lightAlarmEnd').val()
-    };
 
     $('#fountainAlarmStart').change(alarmChanged);
     $('#fountainAlarmEnd').change(alarmChanged);
@@ -370,7 +361,7 @@ $(document).ready(function () {
         });
     }
 
-    setInterval(markCurrentPlayingItem, 10000);
+    setInterval(markCurrentPlayingItem, 5000);
 
     function buildPlaylist(array) {
         var playlist = $('.playlist');

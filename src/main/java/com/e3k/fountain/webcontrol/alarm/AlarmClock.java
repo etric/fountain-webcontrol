@@ -56,10 +56,10 @@ public enum AlarmClock {
             log.info("Turning Alarms OFF");
             alarmManager.removeAllAlarms();
             alarmManager = null;
-            LightDevice.ONE.restoreState();
-            SoundDevice.ONE.restoreState();
-            FountainDevice.ONE.restoreState();
         }
+        LightDevice.ONE.restoreState();
+        SoundDevice.ONE.restoreState();
+        FountainDevice.ONE.restoreState();
     }
 
     public synchronized void updateTime(AlarmType alarmType, LocalTime time) {
@@ -117,7 +117,7 @@ public enum AlarmClock {
     private void reSyncDeviceStateWithAlarms(SwitchableDevice device) {
         DeviceState alarmDeviceState = DeviceState.fromBool(isAlarmActive(device.getType()));
         if (device.currentState() != alarmDeviceState) {
-            log.debug("Re-syncing device state due to Alarm state");
+            log.info("Re-syncing device state due to Alarm state");
             device.switchState(alarmDeviceState);
         }
     }

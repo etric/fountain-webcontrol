@@ -11,6 +11,13 @@ public enum SoundDevice implements SwitchableDevice {
     ONE;
 
     @Override
+    public DeviceState currentState() {
+        //TODO keep in mind this hack (relying on player?)
+        return DeviceState.fromBool(MusicPlayer.ONE.isPlaying());
+//        return SwitchableDevice.super.currentState();
+    }
+
+    @Override
     public void switchState(DeviceState deviceState) {
         SwitchableDevice.super.switchState(deviceState);
         if (DeviceState.on == deviceState) {

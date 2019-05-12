@@ -25,6 +25,7 @@ public final class PlaylistUtils {
         if (!folder.exists()) {
             throw new IllegalStateException("Folder " + musicFolderPath + " not found");
         }
+        boolean isEmpty = true;
         final PlaylistItem[] result = new PlaylistItem[PLAYLIST_SIZE];
         File[] fileList = requireNonNull(folder.listFiles());
         for (File fileItem : fileList) {
@@ -39,12 +40,17 @@ public final class PlaylistUtils {
             if (song != null) {
                 String fullPathToSong = mkFullPath(musicFolderPath, fileItem.getName(), song);
                 result[techNum] = new PlaylistItem(techNum, song, fullPathToSong);
+                isEmpty = false;
             }
+        }
+        if (isEmpty) {
+            String fullPath = PlaylistUtils.class.getClassLoader().getResource("fountain_sound.mp3").getFile();
+            result[0] = new PlaylistItem(0, "Звук фонтана", fullPath);
         }
         return result;
     }
 
-    public static PlaylistItem getPlaylistItem(int techNum) {
+    static PlaylistItem getPlaylistItem(int techNum) {
         if (!isValidMusicNum(techNum)) {
             return null;
         }
