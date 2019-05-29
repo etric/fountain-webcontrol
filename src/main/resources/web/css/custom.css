@@ -50,6 +50,7 @@ body {
     /*background-size: auto 100%;*/
     /*padding-top:100px;*/
     background-size: contain;
+    margin-bottom: 60px; /* Margin bottom by footer height */
 }
 
 .list-group-item,
@@ -152,4 +153,18 @@ body {
         /*background-color: #fff;*/
         /*!*margin-bottom: -40px;*!*/
     }
+}
+
+.pi-sysdatetime {
+    height: 30px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 40px; /* Set the fixed height of the footer here */
+    line-height: 40px; /* Vertically center the text there */
+    background-color: #f5f5f5;
+    border-top: solid 1px rgba(0,0,0,0.3);
 }

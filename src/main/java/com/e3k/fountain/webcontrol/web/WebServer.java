@@ -12,10 +12,12 @@ import com.e3k.fountain.webcontrol.io.LightDevice;
 import com.e3k.fountain.webcontrol.io.SoundDevice;
 import com.e3k.fountain.webcontrol.io.player.MusicPlayer;
 import com.e3k.fountain.webcontrol.io.player.PlaylistUtils;
+import com.e3k.fountain.webcontrol.sysdatetime.SysDateTimeManager;
 import com.jsoniter.output.JsonStream;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.MultipartConfigElement;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
@@ -35,6 +37,14 @@ public class WebServer {
     }
 
     private static void setupEndpoints() {
+        // SYSTEM TIME
+        get("/api/sysdatetime", (request, response) -> SysDateTimeManager.ONE.getTimeFormatted());
+        put("/api/sysdatetime/:sysdatetime", (request, response) -> {
+            LocalDateTime newDateTime = LocalDateTime.parse(request.params(":musicNum"));
+            SysDateTimeManager.ONE.setTime(newDateTime);
+            return "OK";
+        });
+
         // MUSIC
         get("/api/music/currentPlayingItem", (request, response) -> {
             response.status(200);

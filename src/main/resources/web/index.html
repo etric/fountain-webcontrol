@@ -110,87 +110,6 @@
                            data-onstyle="success" data-offstyle="danger" data-size="sm" data-width="100">
                 </div>
 
-                <!-- FOUNTAIN -->
-                <div class="shadow mb-2 px-3 card bg-semi-trans">
-                    <div class="row pb-3">
-                        <div class="col-6 col-md-2 mt-3 pr-0 align-self-center text-center">
-                            <h5 class="m-0"><span><strong>ФОНТАН</strong></span></h5>
-                        </div>
-                        <div class="input-group col-6 col-md-2 mt-3 align-self-center">
-                            <input class="m-0" type="checkbox" id="fountainState" data-toggle="toggle"
-                                   data-on="ВКЛ" data-off="ВЫКЛ" data-width="100">
-                        </div>
-                        <div class="input-group col-6 col-md-4 mt-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Начало</span>
-                            </div>
-                            <input type="text" class="form-control" id="fountainAlarmStart" name="alarmStart"
-                                   value="09:00" required readonly>
-                        </div>
-                        <div class="input-group col-6 col-md-4 mt-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Конец</span>
-                            </div>
-                            <input type="text" class="form-control" id="fountainAlarmEnd" name="alarmEnd" value="18:00"
-                                   required readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- LIGHT -->
-                <div class="shadow mb-2 px-3 card bg-semi-trans">
-                    <div class="row pb-3">
-                        <div class="col-6 col-md-2 mt-3 pr-0 align-self-center text-center">
-                            <h5 class="m-0"><span><strong>СВЕТ</strong></span></h5>
-                        </div>
-                        <div class="input-group col-6 col-md-2 mt-3 align-self-center">
-                            <input class="m-0" type="checkbox" id="lightState" data-toggle="toggle"
-                                   data-on="ВКЛ" data-off="ВЫКЛ" data-width="100">
-                        </div>
-                        <div class="input-group col-6 col-md-4 mt-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Начало</span>
-                            </div>
-                            <input type="text" class="form-control" id="lightAlarmStart" name="alarmStart" value="09:00"
-                                   required readonly>
-                        </div>
-                        <div class="input-group col-6 col-md-4 mt-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Конец</span>
-                            </div>
-                            <input type="text" class="form-control" id="lightAlarmEnd" name="alarmEnd" value="18:00"
-                                   required readonly>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SOUND -->
-                <div class="shadow mb-2 px-3 card bg-semi-trans">
-                    <div class="row pb-3">
-                        <div class="col-6 col-md-2 mt-3 pr-0 align-self-center text-center">
-                            <h5 class="m-0"><span><strong>ЗВУК</strong></span></h5>
-                        </div>
-                        <div class="input-group col-6 col-md-2 mt-3 align-self-center">
-                            <input class="m-0" type="checkbox" id="soundState" data-toggle="toggle"
-                                   data-on="ВКЛ" data-off="ВЫКЛ" data-width="100">
-                        </div>
-                        <div class="input-group col-6 col-md-4 mt-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Начало</span>
-                            </div>
-                            <input type="text" class="form-control" id="soundAlarmStart" name="alarmStart" value="09:00"
-                                   required readonly>
-                        </div>
-                        <div class="input-group col-6 col-md-4 mt-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">Конец</span>
-                            </div>
-                            <input type="text" class="form-control" id="soundAlarmEnd" name="alarmEnd" value="18:00"
-                                   required readonly>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- VOLUME -->
                 <div class="row pb-3">
                     <div class="col-12 col-md-3 mt-3 align-self-center text-center">
@@ -209,6 +128,15 @@
 
     </div>
 </div>
+
+<footer class="footer">
+    <div class="text-center">
+        <strong>Системное время</strong>
+        <i class="fas fa-clock mr-2"></i>
+        <input type="text" class="pi-sysdatetime text-center">
+    </div>
+</footer>
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="js/jquery-3.3.1.min.js"></script>

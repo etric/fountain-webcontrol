@@ -60,6 +60,7 @@ $(document).ready(function () {
         });
         return picker;
     }
+
     var fountainAlarmStartPicker = initAlarmTimePicker('fountainAlarmStart');
     var fountainAlarmEndPicker = initAlarmTimePicker('fountainAlarmEnd');
     var lightAlarmStartPicker = initAlarmTimePicker('lightAlarmStart');
@@ -265,7 +266,7 @@ $(document).ready(function () {
     //////////////////////////////////////////
     function changeFountainState(autoMode) {
         $('#fountainState')
-            // .bootstrapToggle(autoMode ? 'disable' : 'enable')
+        // .bootstrapToggle(autoMode ? 'disable' : 'enable')
             .parent().parent().css('opacity', autoMode ? 0.3 : 1.0);
         $('#fountainAlarmStart').parent().css('opacity', !autoMode ? 0.3 : 1.0);
         $('#fountainAlarmEnd').parent().css('opacity', !autoMode ? 0.3 : 1.0);
@@ -282,9 +283,10 @@ $(document).ready(function () {
             }
         }
     }
+
     function changeLightState(autoMode) {
         $('#lightState')
-            // .bootstrapToggle(autoMode ? 'disable' : 'enable')
+        // .bootstrapToggle(autoMode ? 'disable' : 'enable')
             .parent().parent().css('opacity', autoMode ? 0.3 : 1.0);
         $('#lightAlarmStart').parent().css('opacity', !autoMode ? 0.3 : 1.0);
         $('#lightAlarmEnd').parent().css('opacity', !autoMode ? 0.3 : 1.0);
@@ -301,9 +303,10 @@ $(document).ready(function () {
             }
         }
     }
+
     function changeSoundState(autoMode) {
         $('#soundState')
-            // .bootstrapToggle(autoMode ? 'disable' : 'enable')
+        // .bootstrapToggle(autoMode ? 'disable' : 'enable')
             .parent().parent().css('opacity', autoMode ? 0.3 : 1.0);
         $('#soundAlarmStart').parent().css('opacity', !autoMode ? 0.3 : 1.0);
         $('#soundAlarmEnd').parent().css('opacity', !autoMode ? 0.3 : 1.0);
@@ -328,7 +331,7 @@ $(document).ready(function () {
             console.log('response: ' + response);
             $('#volumeSliderOut').val(response);
             $('#volumeSlider').val(response);
-            $('#volumeSlider').on('change', function() {
+            $('#volumeSlider').on('change', function () {
                 var newVolume = $('#volumeSlider').val();
                 console.log('VOLUME CHANGED: ' + newVolume);
                 $.ajax({
@@ -391,6 +394,7 @@ $(document).ready(function () {
             }
         })
     }
+
     reloadPlaylist();
 
     function isTabletWidth() {
@@ -415,6 +419,100 @@ $(document).ready(function () {
 
     layoutTabs();
     // buildPlaylist([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
+
+    /////////////////////
+    // PI SYSTEM TIME ///
+    /////////////////////
+    (function() {
+        var sysDateTimePicker = new Picker(document.querySelector('.pi-sysdatetime'), {
+            controls: true,
+            headers: true,
+            language: 'ru',
+            format: 'YYYY-MM-DD HH:mm',
+            text: {
+                year: 'Год', month: 'Мясяц', day: 'День', hour: 'Часы', minute: 'Минуты',
+                title: 'Системное время', cancel: 'Отмена', confirm: 'ОК'
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: '/api/sysdatetime',
+            success: function (response) {
+                console.log('response: ' + response);
+                sysDateTimePicker.setValue(response);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+            }
+        });
+        $('.pi-sysdatetime').change(function() {
+            var newSysTime = $(this).val();
+            console.log('Updating system time to ' + newSysTime);
+            $.ajax({
+                type: "PUT",
+                url: '/api/sysdatetime/' + newSysTime,
+                success: function (response) {
+                    console.log('response: ' + response);
+                    toastr.success('Системное время изменено!');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    toastr.error('Системное время не изменено: ' + textStatus);
+                    console.log(textStatus, errorThrown);
+                }
+            });
+        });
+
+    })();
 });
 
 
+function addDeviceControls(userTitle, techTitle) {
+    var html =
+    '                <div class="shadow mb-2 px-3 card bg-semi-trans">' +
+    '                    <div class="row pb-3">' +
+    '                        <div class="col-4 col-md-2 mt-3 pr-0 align-self-center text-center">' +
+    '                            <h5 class="m-0" style="font-size:1rem"><span><strong>' + userTitle + '</strong></span></h5>' +
+    '                        </div>' +
+    '                        <div class="input-group col-4 col-md-2 mt-3 align-self-center">' +
+    '                            <input class="m-0" type="checkbox" id="' + techTitle + 'State" data-toggle="toggle"' +
+    '                                   data-on="ВКЛ" data-off="ВЫКЛ" data-width="100">' +
+    '                        </div>' +
+    '                        <div class="input-group col-4 col-md-2 mt-3 align-self-center">' +
+    '                            <select class="form-control" id="' + techTitle + 'AlarmDay">' +
+    '                                <option value="mon">ПН</option>' +
+    '                                <option value="tue">ВТ</option>' +
+    '                                <option value="wed">СР</option>' +
+    '                                <option value="thu">ЧТ</option>' +
+    '                                <option value="fri">ПТ</option>' +
+    '                                <option value="sat">СБ</option>' +
+    '                                <option value="sun">ВС</option>' +
+    '                            </select>' +
+    '                        </div>' +
+    '                        <div class="input-group col-6 col-md-3 mt-3">' +
+    '                            <div class="input-group-prepend">' +
+    '                                <span class="input-group-text">С</span>' +
+    '                            </div>' +
+    '                            <input type="text" class="form-control" id="' + techTitle + 'AlarmStart" name="alarmStart" value="09:00"' +
+    '                                   required readonly>' +
+    '                        </div>' +
+    '                        <div class="input-group col-6 col-md-3 mt-3">' +
+    '                            <div class="input-group-prepend">' +
+    '                                <span class="input-group-text">До</span>' +
+    '                            </div>' +
+    '                            <input type="text" class="form-control" id="' + techTitle + 'AlarmEnd" name="alarmEnd" value="18:00"' +
+    '                                   required readonly>' +
+    '                        </div>' +
+    '                    </div>' +
+    '                </div>';
+
+    $('#myControls > div').append(html);
+}
+addDeviceControls('ФОНТАН', 'fountain');
+addDeviceControls('СВЕТ', 'light');
+addDeviceControls('ЗВУК', 'sound');
+addDeviceControls('AUX GPIO 1', 'auxGpio1');
+addDeviceControls('AUX GPIO 2', 'auxGpio2');
+addDeviceControls('AUX GPIO 3', 'auxGpio3');
+addDeviceControls('AUX GPIO 4', 'auxGpio4');
+addDeviceControls('AUX GPIO 5', 'auxGpio5');
+addDeviceControls('AUX GPIO 6', 'auxGpio6');

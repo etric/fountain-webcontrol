@@ -57,6 +57,7 @@ enum PinJokey {
             log.error("Cannot find PIN for device {}", device);
             return null;
         }
+        log.debug("Device pin for {}: {}", device, pin);
         return pin;
     }
 
