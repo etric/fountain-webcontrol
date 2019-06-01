@@ -39,6 +39,12 @@ public enum AlarmClock {
             log.info("Turning Alarms ON");
             reSyncDeviceStateWithAlarms(FountainDevice.ONE);
             reSyncDeviceStateWithAlarms(LightDevice.ONE);
+            reSyncDeviceStateWithAlarms(AuxGpio1Device.ONE);
+            reSyncDeviceStateWithAlarms(AuxGpio2Device.ONE);
+            reSyncDeviceStateWithAlarms(AuxGpio3Device.ONE);
+            reSyncDeviceStateWithAlarms(AuxGpio4Device.ONE);
+            reSyncDeviceStateWithAlarms(AuxGpio5Device.ONE);
+            reSyncDeviceStateWithAlarms(AuxGpio6Device.ONE);
             //TODO maybe do not create AlarmManager each time,
             // but keep it running with single dummy Alarm ?
             alarmManager = new AlarmManager();
@@ -67,6 +73,12 @@ public enum AlarmClock {
         }
         LightDevice.ONE.restoreState();
         FountainDevice.ONE.restoreState();
+        AuxGpio1Device.ONE.restoreState();
+        AuxGpio2Device.ONE.restoreState();
+        AuxGpio3Device.ONE.restoreState();
+        AuxGpio4Device.ONE.restoreState();
+        AuxGpio5Device.ONE.restoreState();
+        AuxGpio6Device.ONE.restoreState();
     }
 
     public synchronized void updateTime(DayOfWeek dayOfWeek, AlarmType alarmType, LocalTime time) {

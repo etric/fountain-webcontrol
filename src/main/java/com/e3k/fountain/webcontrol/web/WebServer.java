@@ -8,8 +8,6 @@ import com.e3k.fountain.webcontrol.constant.AlarmType;
 import com.e3k.fountain.webcontrol.constant.ControlMode;
 import com.e3k.fountain.webcontrol.constant.DeviceState;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
-import com.e3k.fountain.webcontrol.io.FountainDevice;
-import com.e3k.fountain.webcontrol.io.LightDevice;
 import com.e3k.fountain.webcontrol.sysdatetime.SysDateTimeManager;
 import lombok.extern.slf4j.Slf4j;
 
@@ -102,14 +100,7 @@ public class WebServer {
             final DeviceState deviceState = DeviceState.valueOf(request.params(":modeOn"));
             PropertiesManager.ONE.setDeviceManualState(deviceType, deviceState);
             if (PropertiesManager.ONE.getControlMode() == ControlMode.manual) {
-                switch (deviceType) {
-                    case light:
-                        LightDevice.ONE.switchState(deviceState);
-                        break;
-                    case fountain:
-                        FountainDevice.ONE.switchState(deviceState);
-                        break;
-                }
+                Utils.deviceByType(deviceType).switchState(deviceState);
             }
             response.status(200);
             return "OK";
