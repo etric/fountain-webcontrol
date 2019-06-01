@@ -2,10 +2,8 @@
 // CONSTANTS //
 ///////////////
 let INTERVAL_GET_SYS_DATE_TIME = 5000;
-let INTERVAL_GET_CURR_PLAYING = 5000;
 let DEVICES = [
     {userTitle: 'ФОНТАН', techName: 'fountain'},
-    {userTitle: 'ЗВУК', techName: 'sound'},
     {userTitle: 'СВЕТ', techName: 'light'},
     {userTitle: 'AUX GPIO 1', techName: 'auxGpio1'},
     {userTitle: 'AUX GPIO 2', techName: 'auxGpio2'},
@@ -23,8 +21,6 @@ let eng2rus = (device) => {
         return 'фонтан';
     } else if (device.startsWith('light')) {
         return 'свет';
-    } else if (device.startsWith('sound')) {
-        return 'звук';
     }
     return device;
 };

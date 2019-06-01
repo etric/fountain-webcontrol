@@ -30,7 +30,6 @@ public class Utils {
 
     public static SwitchableDevice deviceByType(DeviceType deviceType) {
         if (deviceType == DeviceType.fountain) return FountainDevice.ONE;
-//        if (deviceType == DeviceType.sound) return SoundDevice.ONE;
         if (deviceType == DeviceType.light) return LightDevice.ONE;
         if (deviceType == DeviceType.auxGpio1) return AuxGpio1Device.ONE;
         if (deviceType == DeviceType.auxGpio2) return AuxGpio2Device.ONE;
