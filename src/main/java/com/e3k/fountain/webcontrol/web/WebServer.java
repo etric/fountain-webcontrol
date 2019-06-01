@@ -152,17 +152,7 @@ public class WebServer {
             final DeviceState deviceState = DeviceState.valueOf(request.params(":modeOn"));
             PropertiesManager.ONE.setDeviceManualState(deviceType, deviceState);
             if (PropertiesManager.ONE.getControlMode() == ControlMode.manual) {
-                switch (deviceType) {
-                    case light:
-                        LightDevice.ONE.switchState(deviceState);
-                        break;
-                    case sound:
-                        SoundDevice.ONE.switchState(deviceState);
-                        break;
-                    case fountain:
-                        FountainDevice.ONE.switchState(deviceState);
-                        break;
-                }
+                Utils.deviceByType(deviceType).switchState(deviceState);
             }
             response.status(200);
             return "OK";
