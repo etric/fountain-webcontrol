@@ -25,81 +25,20 @@
         <li id="brand-logo-container-min" class="py-2 mb-1 text-center">
             <img id="brand-logo-min" src="img/logo_min.jpg">
         </li>
-        <li class="nav-item">
-            <a class="nav-link active" id="playlist-tab" data-toggle="tab" href="#myPlaylist" role="tab"><i
-                    class="fas fa-list"></i> Мелодии</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="controls-tab" data-toggle="tab" href="#myControls" role="tab"><i
-                    class="fas fa-cog"></i> Настройки</a>
-        </li>
     </ul>
 
     <div class="tab-content row" id="myTabContent">
-        <div class="tab-pane fade show active col-lg-4 col-sm-12" id="myPlaylist" role="tabpanel">
-
-            <div id="brand-logo-container" class="card mb-3 bg-semi-trans shadow">
-                <div class="text-center bg-white py-4">
-                    <img id="brand-logo" class="" src="img/logo.jpg">
-                </div>
-            </div>
-
-            <div class="card mb-3 bg-semi-trans shadow">
-                <div class="card-header p-0">
-                    <h5 class="p-3 m-0 text-center" data-toggle="collapse" data-target="#collapseMusicUpload">Загрузка
-                        новой мелодии</h5>
-                </div>
-                <!--<div class="custom-file" lang="ru">-->
-                <div id="collapseMusicUpload" class="collapse hide">
-                    <div class="card-body px-3 py-2">
-                        <div class="form-inline mb-2">
-                            <label for="music-num-selector"
-                                   class="align-self-center mr-3 mb-2"><strong>Файл</strong></label>
-                            <input type="file" id="music-file-chooser" class="mb-2" style="width: 100%" accept=".mp3">
-                        </div>
-
-                        <div class="form-inline">
-                            <label for="music-num-selector" class="align-self-center mr-3 mb-2"><strong>Мелодия
-                                #</strong></label>
-                            <select class="custom-select mr-3 mb-2" id="music-num-selector">
-                                <option selected value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                                <option value="13">13</option>
-                                <option value="14">14</option>
-                                <option value="15">15</option>
-                                <option value="16">16</option>
-                                <option value="17">17</option>
-                                <option value="18">18</option>
-                                <option value="19">19</option>
-                                <option value="20">20</option>
-                            </select>
-                            <button class="btn btn-info mb-2" id="upload-music-file">
-                                <i class="fas fa-file-upload"></i> Загрузить
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <ol class="list-group shadow playlist">
-            </ol>
-
-        </div>
 
         <div class="tab-pane fade show active col-lg-8 col-sm-12" id="myControls" role="tabpanel">
             <div>
                 <!--<h4>Настройки</h4>-->
                 <!--<div class="row p-2">-->
+
+                <div id="brand-logo-container" class="card mb-3 bg-semi-trans shadow">
+                    <div class="text-center bg-white py-4">
+                        <img id="brand-logo" class="" src="img/logo.jpg">
+                    </div>
+                </div>
 
                 <div class="mb-3 input-group justify-content-start">
                     <div class="align-self-center">
@@ -108,19 +47,6 @@
                     <input type="checkbox" checked data-toggle="toggle" data-on="АВТО" data-off="РУЧНОЙ"
                            id="controlMode"
                            data-onstyle="success" data-offstyle="danger" data-size="sm" data-width="100">
-                </div>
-
-                <!-- VOLUME -->
-                <div class="row pb-3">
-                    <div class="col-12 col-md-3 mt-3 align-self-center text-center">
-                        <h6 class="m-0"><span><strong>ГРОМКОСТЬ:&nbsp;
-                                <output style="font-size: larger" id="volumeSliderOut"
-                                        class="text-center">50</output></strong></span></h6>
-                    </div>
-                    <div class="input-group col-12 col-md-9 mt-3">
-                        <input type="range" class="custom-control custom-range" id="volumeSlider"
-                               step="10" min="0" max="100" oninput="volumeSliderOut.value = volumeSlider.value">
-                    </div>
                 </div>
 
                 <div class="shadow mb-2 px-3 card bg-semi-trans">
@@ -167,11 +93,9 @@
 <script src="js/toastr.min.js"></script>
 <!-- custom scripts -->
 <script src="js/0-initial.js"></script>
-<script src="js/1-music-controls.js"></script>
 <script src="js/2-device-controls.js"></script>
 <script src="js/3-alarm-controls.js"></script>
 <script src="js/4-sys-date-time.js"></script>
-<script src="js/5-volume-controls.js"></script>
 <script src="js/6-control-mode-controls.js"></script>
 <script src="js/7-finish.js"></script>
 </body>
