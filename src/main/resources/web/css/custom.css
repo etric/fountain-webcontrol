@@ -67,12 +67,8 @@ body {
     background-color: rgba(255, 255, 255, 0.8) !important;
 }
 
-#fountainAlarmStart,
-#fountainAlarmEnd,
-#lightAlarmStart,
-#lightAlarmEnd,
-#soundAlarmStart,
-#soundAlarmEnd {
+*[id$="AlarmStart"],
+*[id$="AlarmEnd"] {
     background-color: white !important;
 }
 

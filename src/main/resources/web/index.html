@@ -19,6 +19,7 @@
 <body>
 <div class="p-3">
     <div id="tablet-indicator"></div>
+    <!--<input id="blur-hack" type="text" style="position: absolute; opacity: 0;">-->
 
     <ul class="nav nav-pills fixed-top p-2 bg-nav-trans justify-content-center" id="myTab" role="tablist">
         <li id="brand-logo-container-min" class="py-2 mb-1 text-center">
@@ -42,7 +43,6 @@
                     <img id="brand-logo" class="" src="img/logo.jpg">
                 </div>
             </div>
-
 
             <div class="card mb-3 bg-semi-trans shadow">
                 <div class="card-header p-0">
@@ -119,8 +119,26 @@
                     </div>
                     <div class="input-group col-12 col-md-9 mt-3">
                         <input type="range" class="custom-control custom-range" id="volumeSlider"
-                               onmouseup="volumeChanged()" ontouchend="volumeChanged()"
                                step="10" min="0" max="100" oninput="volumeSliderOut.value = volumeSlider.value">
+                    </div>
+                </div>
+
+                <div class="shadow mb-2 px-3 card bg-semi-trans">
+                    <div class="row pb-3">
+                        <div class="col-8 offset-md-2 col-md-2 mt-3 pr-0 align-self-center text-center">
+                            <h5 class="m-0" style="font-size:1rem"><span><strong>Выбрать день</strong></span></h5>
+                        </div>
+                        <div class="input-group col-4 col-md-2 mt-3 align-self-center">
+                            <select class="form-control" id="commonAlarmDay">
+                                <option value="MONDAY">ПН</option>
+                                <option value="TUESDAY">ВТ</option>
+                                <option value="WEDNESDAY">СР</option>
+                                <option value="THURSDAY">ЧТ</option>
+                                <option value="FRIDAY">ПТ</option>
+                                <option value="SATURDAY">СБ</option>
+                                <option value="SUNDAY">ВС</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -147,6 +165,14 @@
 <script src="js/bootbox.locales.min.js"></script>
 <script src="js/picker.js"></script>
 <script src="js/toastr.min.js"></script>
-<script src="js/custom.js"></script>
+<!-- custom scripts -->
+<script src="js/0-initial.js"></script>
+<script src="js/1-music-controls.js"></script>
+<script src="js/2-device-controls.js"></script>
+<script src="js/3-alarm-controls.js"></script>
+<script src="js/4-sys-date-time.js"></script>
+<script src="js/5-volume-controls.js"></script>
+<script src="js/6-control-mode-controls.js"></script>
+<script src="js/7-finish.js"></script>
 </body>
 </html>

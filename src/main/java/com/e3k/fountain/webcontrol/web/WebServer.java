@@ -1,5 +1,6 @@
 package com.e3k.fountain.webcontrol.web;
 
+import com.e3k.fountain.webcontrol.DaysWeekMap;
 import com.e3k.fountain.webcontrol.Utils;
 import com.e3k.fountain.webcontrol.alarm.AlarmClock;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
@@ -13,13 +14,14 @@ import com.e3k.fountain.webcontrol.io.SoundDevice;
 import com.e3k.fountain.webcontrol.io.player.MusicPlayer;
 import com.e3k.fountain.webcontrol.io.player.PlaylistUtils;
 import com.e3k.fountain.webcontrol.sysdatetime.SysDateTimeManager;
-import com.jsoniter.output.JsonStream;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.MultipartConfigElement;
-import java.time.LocalDateTime;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static spark.Spark.*;
 
@@ -37,11 +39,20 @@ public class WebServer {
     }
 
     private static void setupEndpoints() {
+        // CONFIG
+        get("/api/config", (request, response) -> {
+            StringBuilder sb = new StringBuilder();
+            HashMap<Object, Object> props = new HashMap<>(PropertiesManager.ONE.getProperties());
+            for (Map.Entry entry : props.entrySet()) {
+                sb.append(entry.getKey()).append('=').append(entry.getValue()).append("<br/>");
+            }
+            return sb.toString();
+        });
+
         // SYSTEM TIME
         get("/api/sysdatetime", (request, response) -> SysDateTimeManager.ONE.getTimeFormatted());
-        put("/api/sysdatetime/:sysdatetime", (request, response) -> {
-            LocalDateTime newDateTime = LocalDateTime.parse(request.params(":musicNum"));
-            SysDateTimeManager.ONE.setTime(newDateTime);
+        put("/api/sysdatetime", (request, response) -> {
+            SysDateTimeManager.ONE.parseAndUpdateTime(request.body());
             return "OK";
         });
 
@@ -54,7 +65,7 @@ public class WebServer {
         get("/api/music/playlist", (request, response) -> {
             response.status(200);
             return MusicPlayer.ONE.getPlaylistItems();
-        }, JsonStream::serialize);
+        }, new JsonResponseTransformer());
         put("/api/music/:musicNum", (request, response) -> {
             final int realNum = Integer.parseInt(request.params(":musicNum"));
             final int techNum = realNum - 1;
@@ -113,16 +124,16 @@ public class WebServer {
         // ALARMS CLOCK
         get("/api/alarm/:alarmName", (request, response) -> {
             final AlarmType alarmType = AlarmType.valueOf(request.params(":alarmName"));
-            final LocalTime time = AlarmClock.ONE.getTime(alarmType);
-            final String timeStr = Utils.timeToString(time);
+            final DaysWeekMap<String> weekAlarms = AlarmClock.ONE.getWeekAlarms(alarmType);
             response.status(200);
-            return timeStr;
-        });
-        put("/api/alarm/:alarmName", (request, response) -> {
+            return weekAlarms;
+        }, new JsonResponseTransformer());
+        put("/api/alarm/:alarmName/:dayOfWeek", (request, response) -> {
             final AlarmType alarmType = AlarmType.valueOf(request.params(":alarmName"));
+            final DayOfWeek dayOfWeek = DayOfWeek.valueOf(request.params(":dayOfWeek"));
             try {
                 LocalTime time = Utils.stringToTime(request.body());
-                AlarmClock.ONE.updateTime(alarmType, time);
+                AlarmClock.ONE.updateTime(dayOfWeek, alarmType, time);
                 response.status(200);
                 return "OK";
             } catch (DateTimeParseException ex) {

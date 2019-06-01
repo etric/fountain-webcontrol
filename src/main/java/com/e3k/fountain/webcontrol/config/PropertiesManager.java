@@ -1,6 +1,7 @@
 package com.e3k.fountain.webcontrol.config;
 
 import com.e3k.fountain.webcontrol.Utils;
+import com.e3k.fountain.webcontrol.DaysWeekMap;
 import com.e3k.fountain.webcontrol.constant.AlarmType;
 import com.e3k.fountain.webcontrol.constant.ControlMode;
 import com.e3k.fountain.webcontrol.constant.DeviceState;
@@ -11,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Properties;
 
@@ -29,10 +31,17 @@ public enum PropertiesManager {
     private static final String CONTROL_MODE = "controlMode";
     private static final String LAST_PLAYED_ITEM = "lastPlayedItem";
     private static final String VOLUME = "volume";
+    private static final String HTTP_PORT = "httpPort";
+
     private static final String FOUNTAIN_PIN = "fountainPin";
     private static final String LIGHT_PIN = "lightPin";
     private static final String SOUND_PIN = "soundPin";
-    private static final String HTTP_PORT = "httpPort";
+    private static final String AUX_GPIO1_PIN = "auxGpio1Pin";
+    private static final String AUX_GPIO2_PIN = "auxGpio2Pin";
+    private static final String AUX_GPIO3_PIN = "auxGpio3Pin";
+    private static final String AUX_GPIO4_PIN = "auxGpio4Pin";
+    private static final String AUX_GPIO5_PIN = "auxGpio5Pin";
+    private static final String AUX_GPIO6_PIN = "auxGpio6Pin";
 
     private interface DefaultPropValues {
         ControlMode CONTROL_MODE = ControlMode.manual;
@@ -42,6 +51,12 @@ public enum PropertiesManager {
         int FOUNTAIN_PIN = 0;
         int LIGHT_PIN = 1;
         int SOUND_PIN = 2;
+        int AUX_GPIO1_PIN = 3;
+        int AUX_GPIO2_PIN = 4;
+        int AUX_GPIO3_PIN = 5;
+        int AUX_GPIO4_PIN = 6;
+        int AUX_GPIO5_PIN = 7;
+        int AUX_GPIO6_PIN = 8;
         int HTTP_PORT = 9090;
     }
 
@@ -56,25 +71,36 @@ public enum PropertiesManager {
         loadProperties();
     }
 
-    public LocalTime getAlarmClock(AlarmType alarmType) {
+    public Properties getProperties() {
+        return props;
+    }
+
+    public DaysWeekMap<LocalTime> getAlarmClocks(AlarmType alarmType) {
         requireNonNull(alarmType);
         String value = getProp(alarmType.name());
         if (value == null) {
-            return null;
+            return new DaysWeekMap<>();
         }
         try {
-            return Utils.stringToTime(value);
+            return DaysWeekMap.deserialize(Utils::stringToTime, value);
         } catch (Exception ex) {
             log.warn("Corrupted value " + value + " for property " + alarmType, ex);
-            return null;
+            return new DaysWeekMap<>();
         }
     }
 
-    public void setAlarmClock(AlarmType alarmType, LocalTime localTime) {
+    public void setAlarmClocks(AlarmType alarmType, DaysWeekMap<LocalTime> daysWeekMap) {
         requireNonNull(alarmType);
-        if (localTime != null) {
-            setProp(alarmType.name(), Utils.timeToString(localTime));
+        if (daysWeekMap != null && !daysWeekMap.isEmpty()) {
+            setProp(alarmType.name(), daysWeekMap.serialize(Utils::timeToString)); //TODO
         }
+    }
+
+    public void setAlarmClock(AlarmType alarmType, DayOfWeek dayOfWeek, LocalTime time) {
+        //TODO !!!!!!!!!!!!! don't call GET - it causes full deserialization each time!
+        DaysWeekMap<LocalTime> map = getAlarmClocks(alarmType);
+        map.put(dayOfWeek, time);
+        setAlarmClocks(alarmType, map);
     }
 
     public ControlMode getControlMode() {
@@ -132,6 +158,18 @@ public enum PropertiesManager {
                 return getIntProp(LIGHT_PIN, DefaultPropValues.LIGHT_PIN);
             case sound:
                 return getIntProp(SOUND_PIN, DefaultPropValues.SOUND_PIN);
+            case auxGpio1:
+                return getIntProp(AUX_GPIO1_PIN, DefaultPropValues.AUX_GPIO1_PIN);
+            case auxGpio2:
+                return getIntProp(AUX_GPIO2_PIN, DefaultPropValues.AUX_GPIO2_PIN);
+            case auxGpio3:
+                return getIntProp(AUX_GPIO3_PIN, DefaultPropValues.AUX_GPIO3_PIN);
+            case auxGpio4:
+                return getIntProp(AUX_GPIO4_PIN, DefaultPropValues.AUX_GPIO4_PIN);
+            case auxGpio5:
+                return getIntProp(AUX_GPIO5_PIN, DefaultPropValues.AUX_GPIO5_PIN);
+            case auxGpio6:
+                return getIntProp(AUX_GPIO6_PIN, DefaultPropValues.AUX_GPIO6_PIN);
         }
         throw new IllegalStateException();
     }

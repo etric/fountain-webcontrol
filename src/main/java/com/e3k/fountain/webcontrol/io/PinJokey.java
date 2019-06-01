@@ -26,6 +26,12 @@ enum PinJokey {
             pinMappings.put(DeviceType.fountain, gpio.provisionDigitalOutputPin(initPin(DeviceType.fountain)));
             pinMappings.put(DeviceType.light, gpio.provisionDigitalOutputPin(initPin(DeviceType.light)));
             pinMappings.put(DeviceType.sound, gpio.provisionDigitalOutputPin(initPin(DeviceType.sound)));
+            pinMappings.put(DeviceType.auxGpio1, gpio.provisionDigitalOutputPin(initPin(DeviceType.auxGpio1)));
+            pinMappings.put(DeviceType.auxGpio2, gpio.provisionDigitalOutputPin(initPin(DeviceType.auxGpio2)));
+            pinMappings.put(DeviceType.auxGpio3, gpio.provisionDigitalOutputPin(initPin(DeviceType.auxGpio3)));
+            pinMappings.put(DeviceType.auxGpio4, gpio.provisionDigitalOutputPin(initPin(DeviceType.auxGpio4)));
+            pinMappings.put(DeviceType.auxGpio5, gpio.provisionDigitalOutputPin(initPin(DeviceType.auxGpio5)));
+            pinMappings.put(DeviceType.auxGpio6, gpio.provisionDigitalOutputPin(initPin(DeviceType.auxGpio6)));
         } else {
             LoggerFactory.getLogger(PinJokey.class).error("Not supported on Windows!");
         }
