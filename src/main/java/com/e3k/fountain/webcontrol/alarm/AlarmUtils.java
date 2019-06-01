@@ -28,8 +28,6 @@ final class AlarmUtils {
             return FountainDevice.ONE;
         } else if (alarmType == lightAlarmStart || alarmType == lightAlarmEnd) {
             return LightDevice.ONE;
-        } else if (alarmType == soundAlarmStart || alarmType == soundAlarmEnd) {
-            return SoundDevice.ONE;
         } else if (alarmType == auxGpio1AlarmStart || alarmType == auxGpio1AlarmEnd) {
             return AuxGpio1Device.ONE;
         } else if (alarmType == auxGpio2AlarmStart || alarmType == auxGpio2AlarmEnd) {

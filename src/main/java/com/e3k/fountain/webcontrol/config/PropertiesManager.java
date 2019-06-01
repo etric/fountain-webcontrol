@@ -6,7 +6,6 @@ import com.e3k.fountain.webcontrol.constant.AlarmType;
 import com.e3k.fountain.webcontrol.constant.ControlMode;
 import com.e3k.fountain.webcontrol.constant.DeviceState;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
-import com.e3k.fountain.webcontrol.io.player.PlaylistUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,13 +28,10 @@ public enum PropertiesManager {
     ONE;
 
     private static final String CONTROL_MODE = "controlMode";
-    private static final String LAST_PLAYED_ITEM = "lastPlayedItem";
-    private static final String VOLUME = "volume";
     private static final String HTTP_PORT = "httpPort";
 
     private static final String FOUNTAIN_PIN = "fountainPin";
     private static final String LIGHT_PIN = "lightPin";
-    private static final String SOUND_PIN = "soundPin";
     private static final String AUX_GPIO1_PIN = "auxGpio1Pin";
     private static final String AUX_GPIO2_PIN = "auxGpio2Pin";
     private static final String AUX_GPIO3_PIN = "auxGpio3Pin";
@@ -46,11 +42,8 @@ public enum PropertiesManager {
     private interface DefaultPropValues {
         ControlMode CONTROL_MODE = ControlMode.manual;
         DeviceState DEVICE_STATE = DeviceState.off;
-        int LAST_PLAYED_ITEM = -1;
-        int VOLUME = 50;
         int FOUNTAIN_PIN = 0;
         int LIGHT_PIN = 1;
-        int SOUND_PIN = 2;
         int AUX_GPIO1_PIN = 3;
         int AUX_GPIO2_PIN = 4;
         int AUX_GPIO3_PIN = 5;
@@ -131,24 +124,6 @@ public enum PropertiesManager {
         setProp(deviceType.name(), deviceState.name());
     }
 
-    public int getLastPlayedItem() {
-        return getIntProp(LAST_PLAYED_ITEM, DefaultPropValues.LAST_PLAYED_ITEM);
-    }
-
-    public void setLastPlayedItem(int lastPlayedItem) {
-        if (PlaylistUtils.isValidMusicNum(lastPlayedItem)) {
-            setIntProp(LAST_PLAYED_ITEM, lastPlayedItem);
-        }
-    }
-
-    public int getVolume() {
-        return getIntProp(VOLUME, DefaultPropValues.VOLUME);
-    }
-
-    public void setVolume(int volume) {
-        setIntProp(VOLUME, volume);
-    }
-
     public int getDevicePin(DeviceType deviceType) {
         requireNonNull(deviceType);
         switch (deviceType) {
@@ -156,8 +131,6 @@ public enum PropertiesManager {
                 return getIntProp(FOUNTAIN_PIN, DefaultPropValues.FOUNTAIN_PIN);
             case light:
                 return getIntProp(LIGHT_PIN, DefaultPropValues.LIGHT_PIN);
-            case sound:
-                return getIntProp(SOUND_PIN, DefaultPropValues.SOUND_PIN);
             case auxGpio1:
                 return getIntProp(AUX_GPIO1_PIN, DefaultPropValues.AUX_GPIO1_PIN);
             case auxGpio2:

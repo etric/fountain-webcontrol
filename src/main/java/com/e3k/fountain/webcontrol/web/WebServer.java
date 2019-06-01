@@ -10,13 +10,9 @@ import com.e3k.fountain.webcontrol.constant.DeviceState;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
 import com.e3k.fountain.webcontrol.io.FountainDevice;
 import com.e3k.fountain.webcontrol.io.LightDevice;
-import com.e3k.fountain.webcontrol.io.SoundDevice;
-import com.e3k.fountain.webcontrol.io.player.MusicPlayer;
-import com.e3k.fountain.webcontrol.io.player.PlaylistUtils;
 import com.e3k.fountain.webcontrol.sysdatetime.SysDateTimeManager;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.MultipartConfigElement;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -56,35 +52,6 @@ public class WebServer {
             return "OK";
         });
 
-        // MUSIC
-        get("/api/music/currentPlayingItem", (request, response) -> {
-            response.status(200);
-            final int techNum = MusicPlayer.ONE.getCurrentPlayingItem();
-            return techNum + 1;
-        });
-        get("/api/music/playlist", (request, response) -> {
-            response.status(200);
-            return MusicPlayer.ONE.getPlaylistItems();
-        }, new JsonResponseTransformer());
-        put("/api/music/:musicNum", (request, response) -> {
-            final int realNum = Integer.parseInt(request.params(":musicNum"));
-            final int techNum = realNum - 1;
-            if (!PlaylistUtils.isValidMusicNum(techNum)) {
-                response.status(400);
-                return "Music # must be within range 1..20";
-            }
-            if (MusicPlayer.ONE.getCurrentPlayingItem() == techNum) {
-                response.status(400);
-                return "Music # is currently playing";
-            }
-            request.attribute("org.eclipse.jetty.multipartConfig",
-                    new MultipartConfigElement("/temp"));
-
-            MusicUploadHelper.upload(request.raw().getPart("file"), realNum);
-            response.status(200);
-            return "OK";
-        });
-
         // CONTROL MODE AUTO/MANUAL
         get("/api/mode", (request, response) -> {
             final ControlMode controlMode = PropertiesManager.ONE.getControlMode();
@@ -100,23 +67,6 @@ public class WebServer {
                 AlarmClock.ONE.turnOff();
             }
             PropertiesManager.ONE.setControlMode(mode);
-            response.status(200);
-            return "OK";
-        });
-
-        // VOLUME
-        get("/api/volume", (request, response) -> {
-            String vol = String.valueOf(MusicPlayer.ONE.getVolume());
-            response.status(200);
-            return vol;
-        });
-        put("/api/volume/:val", (request, response) -> {
-            final int vol = Integer.valueOf(request.params(":val"));
-            if (vol < 1 || vol > 100) {
-                response.status(400);
-                return "Volume must be within range 1..100";
-            }
-            MusicPlayer.ONE.changeVolume(vol);
             response.status(200);
             return "OK";
         });
@@ -155,9 +105,6 @@ public class WebServer {
                 switch (deviceType) {
                     case light:
                         LightDevice.ONE.switchState(deviceState);
-                        break;
-                    case sound:
-                        SoundDevice.ONE.switchState(deviceState);
                         break;
                     case fountain:
                         FountainDevice.ONE.switchState(deviceState);

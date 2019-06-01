@@ -25,7 +25,6 @@ enum PinJokey {
             GpioController gpio = GpioFactory.getInstance();
             pinMappings.put(DeviceType.fountain, gpio.provisionDigitalOutputPin(initPin(DeviceType.fountain)));
             pinMappings.put(DeviceType.light, gpio.provisionDigitalOutputPin(initPin(DeviceType.light)));
-            pinMappings.put(DeviceType.sound, gpio.provisionDigitalOutputPin(initPin(DeviceType.sound)));
             pinMappings.put(DeviceType.auxGpio1, gpio.provisionDigitalOutputPin(initPin(DeviceType.auxGpio1)));
             pinMappings.put(DeviceType.auxGpio2, gpio.provisionDigitalOutputPin(initPin(DeviceType.auxGpio2)));
             pinMappings.put(DeviceType.auxGpio3, gpio.provisionDigitalOutputPin(initPin(DeviceType.auxGpio3)));

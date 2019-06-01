@@ -38,7 +38,6 @@ public enum AlarmClock {
         if (alarmManager == null) {
             log.info("Turning Alarms ON");
             reSyncDeviceStateWithAlarms(FountainDevice.ONE);
-            reSyncDeviceStateWithAlarms(SoundDevice.ONE);
             reSyncDeviceStateWithAlarms(LightDevice.ONE);
             //TODO maybe do not create AlarmManager each time,
             // but keep it running with single dummy Alarm ?
@@ -67,7 +66,6 @@ public enum AlarmClock {
             alarmManager = null;
         }
         LightDevice.ONE.restoreState();
-        SoundDevice.ONE.restoreState();
         FountainDevice.ONE.restoreState();
     }
 
@@ -134,9 +132,6 @@ public enum AlarmClock {
         putAlarmStartMapping(map, lightAlarmStart, LightDevice.ONE);
         putAlarmEndMapping(map, lightAlarmEnd, LightDevice.ONE);
 
-        putAlarmStartMapping(map, soundAlarmStart, SoundDevice.ONE);
-        putAlarmEndMapping(map, soundAlarmEnd, SoundDevice.ONE);
-
         putAlarmStartMapping(map, auxGpio1AlarmStart, AuxGpio1Device.ONE);
         putAlarmEndMapping(map, auxGpio1AlarmEnd, AuxGpio1Device.ONE);
 
@@ -176,9 +171,6 @@ public enum AlarmClock {
         } else if (deviceType == DeviceType.light) {
             alarmStart = alarms.get(lightAlarmStart).get(dayOfWeek);
             alarmEnd = alarms.get(lightAlarmEnd).get(dayOfWeek);
-        } else if (deviceType == DeviceType.sound) {
-            alarmStart = alarms.get(soundAlarmStart).get(dayOfWeek);
-            alarmEnd = alarms.get(soundAlarmEnd).get(dayOfWeek);
         } else if (deviceType == DeviceType.auxGpio1) {
             alarmStart = alarms.get(auxGpio1AlarmStart).get(dayOfWeek);
             alarmEnd = alarms.get(auxGpio1AlarmEnd).get(dayOfWeek);
