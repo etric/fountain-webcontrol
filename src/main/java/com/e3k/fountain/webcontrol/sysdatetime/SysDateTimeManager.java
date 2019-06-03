@@ -26,15 +26,14 @@ public enum SysDateTimeManager {
                     .appendValue(MINUTE_OF_HOUR, 2)
                     .toFormatter();
 
-    public void parseAndUpdateTime(String localDateTimeRaw) throws IOException {
+    public void parseAndUpdateTime(String localDateTimeRaw) throws IOException, InterruptedException {
         //ISO-8601 calendar system -- 2007-12-03T10:15:30
         log.info("Updating System Date & Time: {} --> {}", LocalDateTime.now(), localDateTimeRaw);
         LocalDateTime.parse(localDateTimeRaw, sysDateCmdPattern); //validation
 
-        Runtime.getRuntime().exec("sudo date -s '" + localDateTimeRaw + "'"); // TODO add sudo?
+        Process process = Runtime.getRuntime().exec("sudo date -s '" + localDateTimeRaw + "'");
+        process.waitFor();
 
-        // date +%Y%m%d -s "20081128"
-        // date +%T -s "10:13:13"
         //date -s '2009-02-13 11:31:30' #that's a magical timestamp
     }
 

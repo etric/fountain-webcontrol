@@ -83,6 +83,15 @@ public enum AlarmClock {
         AuxGpio6Device.ONE.restoreState();
     }
 
+    public synchronized void reInitAlarms() {
+        log.info("Re-initializing Alarms");
+        if (alarmManager != null) {
+            alarmManager.removeAllAlarms();
+            alarmManager = null;
+        }
+        turnOn();
+    }
+
     public synchronized void updateTime(DayOfWeek dayOfWeek, AlarmType alarmType, LocalTime time) {
         if (alarmManager != null) {
             log.info("Updating Alarm {}/{}: {}", alarmType, dayOfWeek, time);
