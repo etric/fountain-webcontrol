@@ -47,6 +47,7 @@ public class WebServer {
         get("/api/sysdatetime", (request, response) -> SysDateTimeManager.ONE.getTimeFormatted());
         put("/api/sysdatetime", (request, response) -> {
             SysDateTimeManager.ONE.parseAndUpdateTime(request.body());
+            AlarmClock.ONE.reInitAlarms();
             return "OK";
         });
 
