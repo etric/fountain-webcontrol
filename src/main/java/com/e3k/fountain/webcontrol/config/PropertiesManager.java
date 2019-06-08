@@ -42,6 +42,7 @@ public enum PropertiesManager {
     private static final String AUX_GPIO4_PIN = "auxGpio4Pin";
     private static final String AUX_GPIO5_PIN = "auxGpio5Pin";
     private static final String AUX_GPIO6_PIN = "auxGpio6Pin";
+    private static final String PAUSE_BETWEEN_TRACKS = "pauseBetweenTracks";
 
     private interface DefaultPropValues {
         ControlMode CONTROL_MODE = ControlMode.manual;
@@ -57,7 +58,8 @@ public enum PropertiesManager {
         int AUX_GPIO4_PIN = 6;
         int AUX_GPIO5_PIN = 7;
         int AUX_GPIO6_PIN = 8;
-        int HTTP_PORT = 9090;
+        int HTTP_PORT = 80;
+        int PAUSE_BETWEEN_TRACKS = 0;
     }
 
     private static final String CONFIG_FILE = "config.properties";
@@ -147,6 +149,14 @@ public enum PropertiesManager {
 
     public void setVolume(int volume) {
         setIntProp(VOLUME, volume);
+    }
+
+    public int getPauseBetweenTracks() {
+        return getIntProp(PAUSE_BETWEEN_TRACKS, DefaultPropValues.PAUSE_BETWEEN_TRACKS);
+    }
+
+    public void setPauseBetweenTracks(int pauseBetweenTracks) {
+        setIntProp(PAUSE_BETWEEN_TRACKS, pauseBetweenTracks);
     }
 
     public int getDevicePin(DeviceType deviceType) {

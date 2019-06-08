@@ -91,6 +91,15 @@
                 </div>
             </div>
 
+            <div class="row mb-3 mr-2">
+                <div class="col-9 align-self-center">
+                    <h6 class="pt-2 text-right" style="font-size:0.9em;">Пауза между треками (сек)</h6>
+                </div>
+                <select class="col-3 form-control" id="pauseBetweenTracks">
+                    <!-- populated dynamically -->
+                </select>
+            </div>
+
             <ol class="list-group shadow playlist">
             </ol>
 
@@ -101,13 +110,15 @@
                 <!--<h4>Настройки</h4>-->
                 <!--<div class="row p-2">-->
 
-                <div class="mb-3 input-group justify-content-start">
-                    <div class="align-self-center">
-                        <h6 class="m-0 pr-3 text-center"><span>РЕЖИМ</span></h6>
+                <div class="row mb-3">
+                    <div class="col-6 input-group justify-content-start">
+                        <div class="align-self-center">
+                            <h6 class="m-0 pr-3 text-center"><span>РЕЖИМ</span></h6>
+                        </div>
+                        <input type="checkbox" checked data-toggle="toggle" data-on="АВТО" data-off="РУЧНОЙ"
+                               id="controlMode"
+                               data-onstyle="success" data-offstyle="danger" data-size="sm" data-width="100">
                     </div>
-                    <input type="checkbox" checked data-toggle="toggle" data-on="АВТО" data-off="РУЧНОЙ"
-                           id="controlMode"
-                           data-onstyle="success" data-offstyle="danger" data-size="sm" data-width="100">
                 </div>
 
                 <!-- VOLUME -->

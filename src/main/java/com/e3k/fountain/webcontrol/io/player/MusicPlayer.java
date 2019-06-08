@@ -17,14 +17,17 @@ public enum MusicPlayer implements BasicPlayerListener {
     private final BasicPlayer audioPlayer;
     private final PlaylistItem[] playlist;
 
-    private volatile int nowPlaying = -1;
+    private volatile int nowPlaying;
     private volatile int volume;
+    private volatile int pauseBetweenTracks = 0;
 
     MusicPlayer() {
         audioPlayer = new BasicPlayer();
         audioPlayer.addBasicPlayerListener(this);
+        nowPlaying = -1;
         playlist = PlaylistUtils.getPlaylist();
         volume = PropertiesManager.ONE.getVolume();
+        pauseBetweenTracks = PropertiesManager.ONE.getPauseBetweenTracks();
     }
 
     public synchronized void startPlaylistWhereLeft() {
@@ -69,6 +72,16 @@ public enum MusicPlayer implements BasicPlayerListener {
 
     public int getVolume() {
         return volume;
+    }
+
+    public synchronized void changePauseBetweenTracks(int pauseBetweenTracks) {
+        log.info("Changing pause between tracks {}", pauseBetweenTracks);
+        PropertiesManager.ONE.setPauseBetweenTracks(pauseBetweenTracks);
+        this.pauseBetweenTracks = pauseBetweenTracks;
+    }
+
+    public int getPauseBetweenTracks() {
+        return pauseBetweenTracks;
     }
 
     public synchronized void stopPlaying() {
@@ -116,6 +129,14 @@ public enum MusicPlayer implements BasicPlayerListener {
     @Override
     public void stateUpdated(BasicPlayerEvent event) {
         if (event.getCode() == BasicPlayerEvent.EOM) {
+            if (pauseBetweenTracks > 0) {
+                //TODO switch devices according to music state!
+                try {
+                    Thread.sleep(pauseBetweenTracks);
+                } catch (InterruptedException e) {
+                    log.error("Failed pausing between tracks", e);
+                }
+            }
             playItem(nowPlaying + 1);
         }
     }

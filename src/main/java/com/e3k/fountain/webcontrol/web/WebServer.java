@@ -122,6 +122,23 @@ public class WebServer {
             return "OK";
         });
 
+        // PAUSE BETWEEN TRACKS
+        get("/api/pauseBetweenTracks", (request, response) -> {
+            String pauseBetweenTracks = String.valueOf(MusicPlayer.ONE.getPauseBetweenTracks());
+            response.status(200);
+            return pauseBetweenTracks;
+        });
+        put("/api/pauseBetweenTracks/:val", (request, response) -> {
+            final int pauseBetweenTracks = Integer.valueOf(request.params(":val"));
+            if (pauseBetweenTracks < 0 || pauseBetweenTracks > 300) {
+                response.status(400);
+                return "Pause Between Tracks must be within range 0..300";
+            }
+            MusicPlayer.ONE.changePauseBetweenTracks(pauseBetweenTracks);
+            response.status(200);
+            return "OK";
+        });
+
         // ALARMS CLOCK
         get("/api/alarm/:alarmName", (request, response) -> {
             final AlarmType alarmType = AlarmType.valueOf(request.params(":alarmName"));

@@ -85,4 +85,44 @@ let initMusicControls = () => {
             }
         })
     })();
+
+    // PAUSE BETWEEN TRACKS
+    (() => {
+        const pauseBetweenTracksEl = $('#pauseBetweenTracks');
+
+        for (let i = 0; i <= 300; i++) {
+            pauseBetweenTracksEl.append(`<option value="${i}">${i}</option>}`);
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '/api/pauseBetweenTracks',
+            success: (response) => {
+                console.log('INIT: pauseBetweenTracksEl - ' + response);
+                pauseBetweenTracksEl.val(response); //TODO works?
+                pauseBetweenTracksEl
+                    .on('focusin', function () {
+                        $(this).data('val', $(this).val());
+                    })
+                    .on('change', function () {
+                        let prev = $(this).data('val');
+                        let current = $(this).val();
+                        if (prev !== current) {
+                            $.ajax({
+                                type: "PUT",
+                                url: '/api/pauseBetweenTracks/' + current,
+                                success: (response) => {
+                                    toastr.success('Пауза изменена!');
+                                },
+                                error: (jqXHR, textStatus, errorThrown) => {
+                                    toastr.error('Пауза не изменена: ' + textStatus);
+                                    console.log(textStatus, errorThrown);
+                                }
+                            });
+                        }
+                    });
+            },
+            error: (jqXHR, textStatus, errorThrown) => console.log(textStatus, errorThrown)
+        });
+    })();
 };
