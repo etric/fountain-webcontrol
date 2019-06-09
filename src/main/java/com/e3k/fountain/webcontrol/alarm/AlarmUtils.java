@@ -30,18 +30,6 @@ final class AlarmUtils {
             return LightDevice.ONE;
         } else if (alarmType == soundAlarmStart || alarmType == soundAlarmEnd) {
             return SoundDevice.ONE;
-        } else if (alarmType == auxGpio1AlarmStart || alarmType == auxGpio1AlarmEnd) {
-            return AuxGpio1Device.ONE;
-        } else if (alarmType == auxGpio2AlarmStart || alarmType == auxGpio2AlarmEnd) {
-            return AuxGpio2Device.ONE;
-        } else if (alarmType == auxGpio3AlarmStart || alarmType == auxGpio3AlarmEnd) {
-            return AuxGpio3Device.ONE;
-        } else if (alarmType == auxGpio4AlarmStart || alarmType == auxGpio4AlarmEnd) {
-            return AuxGpio4Device.ONE;
-        } else if (alarmType == auxGpio5AlarmStart || alarmType == auxGpio5AlarmEnd) {
-            return AuxGpio5Device.ONE;
-        } else if (alarmType == auxGpio6AlarmStart || alarmType == auxGpio6AlarmEnd) {
-            return AuxGpio6Device.ONE;
         } else {
             throw new IllegalArgumentException();
         }

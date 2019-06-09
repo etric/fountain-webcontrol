@@ -116,7 +116,7 @@ let initAlarmControls = () => {
         $('#' + alarmEndType).val(alarmsWeekData[alarmEndType][selectedAlarmDay]);
     };
 
-    DEVICES.forEach(deviceInfo => {
+    DEVICES_WITH_ALARMS.forEach(deviceInfo => {
         let alarmStartType = deviceInfo.techName + 'AlarmStart';
         let alarmEndType = deviceInfo.techName + 'AlarmEnd';
         let alarmDay = deviceInfo.techName + 'AlarmDay';

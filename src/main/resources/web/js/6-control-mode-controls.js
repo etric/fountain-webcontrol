@@ -5,7 +5,7 @@
 let initControlModeControls = () => {
 
     let changeAllDevicesSwitchState = (autoMode) => {
-        DEVICES.forEach(deviceInfo => {
+        DEVICES_WITH_ALARMS.forEach(deviceInfo => {
             let deviceType = deviceInfo.techName;
             let stateElem = $('#' + deviceType + 'State');
 
