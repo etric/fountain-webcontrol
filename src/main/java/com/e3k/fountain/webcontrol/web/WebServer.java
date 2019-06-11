@@ -33,6 +33,19 @@ public class WebServer {
     }
 
     private static void setupEndpoints() {
+        // DEVICES MAP
+        get("/api/devicesMap", (request, response) -> {
+            Map<DeviceType, Map<String, Object>> devicesMap = new HashMap<>();
+            for (DeviceType deviceType : DeviceType.values()) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("label", PropertiesManager.ONE.getLabel(deviceType));
+                data.put("pin", PropertiesManager.ONE.getDevicePin(deviceType));
+                data.put("state", PropertiesManager.ONE.getDeviceManualState(deviceType));
+                devicesMap.put(deviceType, data);
+            }
+            return devicesMap;
+        }, new JsonResponseTransformer());
+
         // CONFIG
         get("/api/config", (request, response) -> {
             StringBuilder sb = new StringBuilder();

@@ -39,12 +39,6 @@ public enum AlarmClock {
             log.info("Turning Alarms ON");
             reSyncDeviceStateWithAlarms(FountainDevice.ONE);
             reSyncDeviceStateWithAlarms(LightDevice.ONE);
-            reSyncDeviceStateWithAlarms(AuxGpio1Device.ONE);
-            reSyncDeviceStateWithAlarms(AuxGpio2Device.ONE);
-            reSyncDeviceStateWithAlarms(AuxGpio3Device.ONE);
-            reSyncDeviceStateWithAlarms(AuxGpio4Device.ONE);
-            reSyncDeviceStateWithAlarms(AuxGpio5Device.ONE);
-            reSyncDeviceStateWithAlarms(AuxGpio6Device.ONE);
             //TODO maybe do not create AlarmManager each time,
             // but keep it running with single dummy Alarm ?
             alarmManager = new AlarmManager();
@@ -73,12 +67,6 @@ public enum AlarmClock {
         }
         LightDevice.ONE.restoreState();
         FountainDevice.ONE.restoreState();
-        AuxGpio1Device.ONE.restoreState();
-        AuxGpio2Device.ONE.restoreState();
-        AuxGpio3Device.ONE.restoreState();
-        AuxGpio4Device.ONE.restoreState();
-        AuxGpio5Device.ONE.restoreState();
-        AuxGpio6Device.ONE.restoreState();
     }
 
     public synchronized void reInitAlarms() {
@@ -153,28 +141,10 @@ public enum AlarmClock {
         putAlarmStartMapping(map, lightAlarmStart, LightDevice.ONE);
         putAlarmEndMapping(map, lightAlarmEnd, LightDevice.ONE);
 
-        putAlarmStartMapping(map, auxGpio1AlarmStart, AuxGpio1Device.ONE);
-        putAlarmEndMapping(map, auxGpio1AlarmEnd, AuxGpio1Device.ONE);
-
-        putAlarmStartMapping(map, auxGpio2AlarmStart, AuxGpio2Device.ONE);
-        putAlarmEndMapping(map, auxGpio2AlarmEnd, AuxGpio2Device.ONE);
-
-        putAlarmStartMapping(map, auxGpio3AlarmStart, AuxGpio3Device.ONE);
-        putAlarmEndMapping(map, auxGpio3AlarmEnd, AuxGpio3Device.ONE);
-
-        putAlarmStartMapping(map, auxGpio4AlarmStart, AuxGpio4Device.ONE);
-        putAlarmEndMapping(map, auxGpio4AlarmEnd, AuxGpio4Device.ONE);
-
-        putAlarmStartMapping(map, auxGpio5AlarmStart, AuxGpio5Device.ONE);
-        putAlarmEndMapping(map, auxGpio5AlarmEnd, AuxGpio5Device.ONE);
-
-        putAlarmStartMapping(map, auxGpio6AlarmStart, AuxGpio6Device.ONE);
-        putAlarmEndMapping(map, auxGpio6AlarmEnd, AuxGpio6Device.ONE);
-
         return Collections.unmodifiableMap(map);
     }
 
-    private void reSyncDeviceStateWithAlarms(SwitchableDevice device) {
+    public void reSyncDeviceStateWithAlarms(SwitchableDevice device) {
         DayOfWeek todayDayOfWeek = LocalDate.now().getDayOfWeek();
         DeviceState alarmDeviceState = DeviceState.fromBool(isAlarmActive(todayDayOfWeek, device.getType()));
         if (device.currentState() != alarmDeviceState) {
@@ -192,24 +162,6 @@ public enum AlarmClock {
         } else if (deviceType == DeviceType.light) {
             alarmStart = alarms.get(lightAlarmStart).get(dayOfWeek);
             alarmEnd = alarms.get(lightAlarmEnd).get(dayOfWeek);
-        } else if (deviceType == DeviceType.auxGpio1) {
-            alarmStart = alarms.get(auxGpio1AlarmStart).get(dayOfWeek);
-            alarmEnd = alarms.get(auxGpio1AlarmEnd).get(dayOfWeek);
-        } else if (deviceType == DeviceType.auxGpio2) {
-            alarmStart = alarms.get(auxGpio2AlarmStart).get(dayOfWeek);
-            alarmEnd = alarms.get(auxGpio2AlarmEnd).get(dayOfWeek);
-        } else if (deviceType == DeviceType.auxGpio3) {
-            alarmStart = alarms.get(auxGpio3AlarmStart).get(dayOfWeek);
-            alarmEnd = alarms.get(auxGpio3AlarmEnd).get(dayOfWeek);
-        } else if (deviceType == DeviceType.auxGpio4) {
-            alarmStart = alarms.get(auxGpio4AlarmStart).get(dayOfWeek);
-            alarmEnd = alarms.get(auxGpio4AlarmEnd).get(dayOfWeek);
-        } else if (deviceType == DeviceType.auxGpio5) {
-            alarmStart = alarms.get(auxGpio5AlarmStart).get(dayOfWeek);
-            alarmEnd = alarms.get(auxGpio5AlarmEnd).get(dayOfWeek);
-        } else if (deviceType == DeviceType.auxGpio6) {
-            alarmStart = alarms.get(auxGpio6AlarmStart).get(dayOfWeek);
-            alarmEnd = alarms.get(auxGpio6AlarmEnd).get(dayOfWeek);
         } else {
             throw new IllegalArgumentException();
         }

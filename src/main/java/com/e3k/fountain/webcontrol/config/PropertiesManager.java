@@ -11,9 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 import static java.util.Objects.requireNonNull;
 
@@ -30,36 +35,13 @@ public enum PropertiesManager {
     private static final String CONTROL_MODE = "controlMode";
     private static final String HTTP_PORT = "httpPort";
 
-    private static final String FOUNTAIN_PIN = "fountainPin";
-    private static final String LIGHT_PIN = "lightPin";
-    private static final String AUX_GPIO1_PIN = "auxGpio1Pin";
-    private static final String AUX_GPIO2_PIN = "auxGpio2Pin";
-    private static final String AUX_GPIO3_PIN = "auxGpio3Pin";
-    private static final String AUX_GPIO4_PIN = "auxGpio4Pin";
-    private static final String AUX_GPIO5_PIN = "auxGpio5Pin";
-    private static final String AUX_GPIO6_PIN = "auxGpio6Pin";
-
-    private interface DefaultPropValues {
-        ControlMode CONTROL_MODE = ControlMode.manual;
-        DeviceState DEVICE_STATE = DeviceState.off;
-        int FOUNTAIN_PIN = 0;
-        int LIGHT_PIN = 1;
-        int AUX_GPIO1_PIN = 3;
-        int AUX_GPIO2_PIN = 4;
-        int AUX_GPIO3_PIN = 5;
-        int AUX_GPIO4_PIN = 6;
-        int AUX_GPIO5_PIN = 7;
-        int AUX_GPIO6_PIN = 8;
-        int HTTP_PORT = 9090;
-    }
-
     private static final String CONFIG_FILE = "config.properties";
 
     private final Properties props;
     private final File propsFile;
 
     PropertiesManager() {
-        props = new Properties();
+        props = new Properties(getDefaultProperties());
         propsFile = new File(CONFIG_FILE);
         loadProperties();
     }
@@ -98,9 +80,6 @@ public enum PropertiesManager {
 
     public ControlMode getControlMode() {
         final String controlModeStr = getProp(CONTROL_MODE);
-        if (controlModeStr == null) {
-            return DefaultPropValues.CONTROL_MODE;
-        }
         return ControlMode.valueOf(controlModeStr);
     }
 
@@ -112,9 +91,6 @@ public enum PropertiesManager {
     public DeviceState getDeviceManualState(DeviceType deviceType) {
         requireNonNull(deviceType);
         final String deviceState = getProp(deviceType.name());
-        if (deviceState == null) {
-            return DefaultPropValues.DEVICE_STATE;
-        }
         return DeviceState.valueOf(deviceState);
     }
 
@@ -126,29 +102,15 @@ public enum PropertiesManager {
 
     public int getDevicePin(DeviceType deviceType) {
         requireNonNull(deviceType);
-        switch (deviceType) {
-            case fountain:
-                return getIntProp(FOUNTAIN_PIN, DefaultPropValues.FOUNTAIN_PIN);
-            case light:
-                return getIntProp(LIGHT_PIN, DefaultPropValues.LIGHT_PIN);
-            case auxGpio1:
-                return getIntProp(AUX_GPIO1_PIN, DefaultPropValues.AUX_GPIO1_PIN);
-            case auxGpio2:
-                return getIntProp(AUX_GPIO2_PIN, DefaultPropValues.AUX_GPIO2_PIN);
-            case auxGpio3:
-                return getIntProp(AUX_GPIO3_PIN, DefaultPropValues.AUX_GPIO3_PIN);
-            case auxGpio4:
-                return getIntProp(AUX_GPIO4_PIN, DefaultPropValues.AUX_GPIO4_PIN);
-            case auxGpio5:
-                return getIntProp(AUX_GPIO5_PIN, DefaultPropValues.AUX_GPIO5_PIN);
-            case auxGpio6:
-                return getIntProp(AUX_GPIO6_PIN, DefaultPropValues.AUX_GPIO6_PIN);
-        }
-        throw new IllegalStateException();
+        return getIntProp(deviceType.name() + "Pin");
     }
 
     public int getPort() {
-        return getIntProp(HTTP_PORT, DefaultPropValues.HTTP_PORT);
+        return getIntProp(HTTP_PORT);
+    }
+
+    public String getLabel(DeviceType deviceType) {
+        return getProp(deviceType.name() + "Label");
     }
 
     private void setProp(String property, String value) {
@@ -173,16 +135,9 @@ public enum PropertiesManager {
         setProp(property, String.valueOf(value));
     }
 
-    private int getIntProp(String property, int defaultValue) {
-        String valStr = getProp(property, null);
-        if (valStr == null) {
-            return defaultValue;
-        }
-        try {
-            return Integer.parseInt(valStr);
-        } catch (NumberFormatException nfe) {
-            return defaultValue;
-        }
+    private int getIntProp(String property) {
+        String valStr = getProp(property);
+        return Integer.parseInt(valStr);
     }
 
     private void storeProperties() {
@@ -198,8 +153,9 @@ public enum PropertiesManager {
         final Logger _log = LoggerFactory.getLogger(PropertiesManager.class);
         _log.info("Loading properties from {}", CONFIG_FILE);
         if (propsFile.exists()) {
-            try (InputStream propsIn = new FileInputStream(propsFile)) {
-                props.load(propsIn);
+            try (Reader reader = Files.newBufferedReader(propsFile.toPath(), Charset.forName("UTF-8"))) {
+                props.load(reader);
+                validatePins();
                 _log.info("Properties successfully loaded");
             } catch (IOException ex) {
                 _log.error("Failed loading properties", ex);
@@ -211,5 +167,35 @@ public enum PropertiesManager {
                 _log.error("Failed creating properties file", ex);
             }
         }
+    }
+
+    private void validatePins() {
+        Set<String> assignedPins = new HashSet<>();
+        Enumeration<?> propNamesEnumeration = props.propertyNames();
+        while (propNamesEnumeration.hasMoreElements()) {
+            String propName = (String) propNamesEnumeration.nextElement();
+            if (propName.endsWith("Pin")) {
+                String pinProp = props.getProperty(propName);
+                if (assignedPins.contains(pinProp)) {
+                    throw new AssertionError("Same PIN is assigned to multiple devices!");
+                }
+                assignedPins.add(pinProp);
+            }
+        }
+    }
+
+    private static Properties getDefaultProperties() {
+        Properties defaultProperties = new Properties();
+
+        defaultProperties.setProperty(CONTROL_MODE, ControlMode.manual.name());
+        defaultProperties.setProperty(HTTP_PORT, "80");
+
+        int pinNo = 0;
+        for (DeviceType deviceType : DeviceType.values()) {
+            defaultProperties.setProperty(deviceType.name(), DeviceState.off.name());
+            defaultProperties.setProperty(deviceType.name() + "Pin", String.valueOf(pinNo++));
+        }
+
+        return defaultProperties;
     }
 }
