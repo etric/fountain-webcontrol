@@ -8,9 +8,6 @@ import com.e3k.fountain.webcontrol.constant.AlarmType;
 import com.e3k.fountain.webcontrol.constant.ControlMode;
 import com.e3k.fountain.webcontrol.constant.DeviceState;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
-import com.e3k.fountain.webcontrol.io.FountainDevice;
-import com.e3k.fountain.webcontrol.io.LightDevice;
-import com.e3k.fountain.webcontrol.io.SoundDevice;
 import com.e3k.fountain.webcontrol.io.player.MusicPlayer;
 import com.e3k.fountain.webcontrol.io.player.PlaylistUtils;
 import com.e3k.fountain.webcontrol.sysdatetime.SysDateTimeManager;
@@ -39,6 +36,19 @@ public class WebServer {
     }
 
     private static void setupEndpoints() {
+        // DEVICES MAP
+        get("/api/devicesMap", (request, response) -> {
+            Map<DeviceType, Map<String, Object>> devicesMap = new HashMap<>();
+            for (DeviceType deviceType : DeviceType.values()) {
+                Map<String, Object> data = new HashMap<>();
+                data.put("label", PropertiesManager.ONE.getLabel(deviceType));
+                data.put("pin", PropertiesManager.ONE.getDevicePin(deviceType));
+                data.put("state", PropertiesManager.ONE.getDeviceManualState(deviceType));
+                devicesMap.put(deviceType, data);
+            }
+            return devicesMap;
+        }, new JsonResponseTransformer());
+
         // CONFIG
         get("/api/config", (request, response) -> {
             StringBuilder sb = new StringBuilder();

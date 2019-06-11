@@ -4,15 +4,15 @@
 const INTERVAL_GET_SYS_DATE_TIME = 5000;
 const INTERVAL_GET_CURR_PLAYING = 5000;
 const DEVICES = [
-    {userTitle: 'ФОНТАН', techName: 'fountain', withAlarms: true},
-    {userTitle: 'ЗВУК', techName: 'sound', withAlarms: true},
-    {userTitle: 'СВЕТ', techName: 'light', withAlarms: true},
-    {userTitle: 'AUX GPIO 1', techName: 'auxGpio1', withAlarms: false},
-    {userTitle: 'AUX GPIO 2', techName: 'auxGpio2', withAlarms: false},
-    {userTitle: 'AUX GPIO 3', techName: 'auxGpio3', withAlarms: false},
-    {userTitle: 'AUX GPIO 4', techName: 'auxGpio4', withAlarms: false},
-    {userTitle: 'AUX GPIO 5', techName: 'auxGpio5', withAlarms: false},
-    {userTitle: 'AUX GPIO 6', techName: 'auxGpio6', withAlarms: false}
+    {techName: 'fountain', withAlarms: true},
+    {techName: 'sound', withAlarms: true},
+    {techName: 'light', withAlarms: true},
+    {techName: 'auxGpio1', withAlarms: false},
+    {techName: 'auxGpio2', withAlarms: false},
+    {techName: 'auxGpio3', withAlarms: false},
+    {techName: 'auxGpio4', withAlarms: false},
+    {techName: 'auxGpio5', withAlarms: false},
+    {techName: 'auxGpio6', withAlarms: false}
 ];
 const DEVICES_WITH_ALARMS = DEVICES.filter(i => i.withAlarms);
 

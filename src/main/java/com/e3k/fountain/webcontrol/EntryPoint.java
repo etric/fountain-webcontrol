@@ -3,6 +3,7 @@ package com.e3k.fountain.webcontrol;
 import com.e3k.fountain.webcontrol.alarm.AlarmClock;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
 import com.e3k.fountain.webcontrol.constant.ControlMode;
+import com.e3k.fountain.webcontrol.io.SoundExtCtrlDevice;
 import com.e3k.fountain.webcontrol.web.WebServer;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,6 +21,8 @@ public class EntryPoint {
         } else {
             AlarmClock.ONE.turnOff();
         }
+
+        SoundExtCtrlDevice.ONE.registerListener();
     }
 
 }

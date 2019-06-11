@@ -1,6 +1,9 @@
 package com.e3k.fountain.webcontrol.io.player;
 
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
+import com.e3k.fountain.webcontrol.constant.DeviceState;
+import com.e3k.fountain.webcontrol.io.SoundFreqGenDevice;
+import com.e3k.fountain.webcontrol.io.SoundIndicatorDevice;
 import javazoom.jlgui.basicplayer.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +22,7 @@ public enum MusicPlayer implements BasicPlayerListener {
 
     private volatile int nowPlaying;
     private volatile int volume;
-    private volatile int pauseBetweenTracks = 0;
+    private volatile int pauseBetweenTracks;
 
     MusicPlayer() {
         audioPlayer = new BasicPlayer();
@@ -28,6 +31,10 @@ public enum MusicPlayer implements BasicPlayerListener {
         playlist = PlaylistUtils.getPlaylist();
         volume = PropertiesManager.ONE.getVolume();
         pauseBetweenTracks = PropertiesManager.ONE.getPauseBetweenTracks();
+    }
+
+    public synchronized void startPlaylistFromBegin() {
+        playItem(0);
     }
 
     public synchronized void startPlaylistWhereLeft() {
@@ -90,6 +97,8 @@ public enum MusicPlayer implements BasicPlayerListener {
             try {
                 audioPlayer.stop();
                 nowPlaying = -1;
+                SoundIndicatorDevice.ONE.switchState(DeviceState.off);
+                SoundFreqGenDevice.ONE.stopBlinking();
             } catch (BasicPlayerException e) {
                 log.error("Failed stopping player", e);
             }
@@ -116,6 +125,8 @@ public enum MusicPlayer implements BasicPlayerListener {
                 // Set Pan (-1.0 to 1.0).
                 audioPlayer.setPan(0.0);
                 nowPlaying = pliIndex;
+                SoundFreqGenDevice.ONE.startBlinking();
+                SoundIndicatorDevice.ONE.switchState(DeviceState.on);
                 PropertiesManager.ONE.setLastPlayedItem(nowPlaying);
             } catch (BasicPlayerException e) {
                 log.error("Failed playing item " + pliIndex, e);
@@ -130,7 +141,8 @@ public enum MusicPlayer implements BasicPlayerListener {
     public void stateUpdated(BasicPlayerEvent event) {
         if (event.getCode() == BasicPlayerEvent.EOM) {
             if (pauseBetweenTracks > 0) {
-                //TODO switch devices according to music state!
+                SoundIndicatorDevice.ONE.switchState(DeviceState.off);
+                SoundFreqGenDevice.ONE.stopBlinking();
                 try {
                     Thread.sleep(pauseBetweenTracks);
                 } catch (InterruptedException e) {

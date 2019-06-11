@@ -2,6 +2,7 @@ package com.e3k.fountain.webcontrol.alarm;
 
 import com.e3k.fountain.webcontrol.DaysWeekMap;
 import com.e3k.fountain.webcontrol.alarm.handler.EndAlarmListener;
+import com.e3k.fountain.webcontrol.alarm.handler.SoundStartAlarmListener;
 import com.e3k.fountain.webcontrol.alarm.handler.StartAlarmListener;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
 import com.e3k.fountain.webcontrol.constant.AlarmType;
@@ -9,6 +10,7 @@ import com.e3k.fountain.webcontrol.constant.DeviceState;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
 import com.e3k.fountain.webcontrol.io.*;
 import fr.dyade.jdring.AlarmEntry;
+import fr.dyade.jdring.AlarmListener;
 import fr.dyade.jdring.AlarmManager;
 import fr.dyade.jdring.PastDateException;
 import lombok.extern.slf4j.Slf4j;
@@ -130,6 +132,10 @@ public enum AlarmClock {
         map.put(alarmType, buildWeekAlarmEntries(9, 0, new StartAlarmListener(switchableDevice), alarmType));
     }
 
+    private static void putAlarmStartMapping(Map<AlarmType, DaysWeekMap<AlarmEntry>> map, AlarmType alarmType, AlarmListener alarmListener) {
+        map.put(alarmType, buildWeekAlarmEntries(9, 0, alarmListener, alarmType));
+    }
+
     private static void putAlarmEndMapping(Map<AlarmType, DaysWeekMap<AlarmEntry>> map, AlarmType alarmType, SwitchableDevice switchableDevice) {
         map.put(alarmType, buildWeekAlarmEntries(18, 0, new EndAlarmListener(switchableDevice), alarmType));
     }
@@ -143,13 +149,13 @@ public enum AlarmClock {
         putAlarmStartMapping(map, lightAlarmStart, LightDevice.ONE);
         putAlarmEndMapping(map, lightAlarmEnd, LightDevice.ONE);
 
-        putAlarmStartMapping(map, soundAlarmStart, SoundDevice.ONE);
+        putAlarmStartMapping(map, soundAlarmStart, new SoundStartAlarmListener());
         putAlarmEndMapping(map, soundAlarmEnd, SoundDevice.ONE);
 
         return Collections.unmodifiableMap(map);
     }
 
-    private void reSyncDeviceStateWithAlarms(SwitchableDevice device) {
+    public void reSyncDeviceStateWithAlarms(SwitchableDevice device) {
         DayOfWeek todayDayOfWeek = LocalDate.now().getDayOfWeek();
         DeviceState alarmDeviceState = DeviceState.fromBool(isAlarmActive(todayDayOfWeek, device.getType()));
         if (device.currentState() != alarmDeviceState) {

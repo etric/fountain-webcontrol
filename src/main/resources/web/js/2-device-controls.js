@@ -4,16 +4,16 @@
 
 let initDeviceControls = () => {
 
-    let addDeviceControls = (deviceInfo) => {
-        const {userTitle, techName, withAlarms} = deviceInfo;
+    let addDeviceControls = (completeDeviceData) => {
+        const {label, pin, techName, withAlarms} = completeDeviceData;
 
         let html =
             '                <div class="shadow mb-2 px-3 card bg-semi-trans">' +
             '                    <div class="row pb-3">' +
-            '                        <div class="col-4 col-md-2 mt-3 pr-0 align-self-center text-center">' +
-            '                            <h5 class="m-0" style="font-size:1rem"><span><strong>' + userTitle + '</strong></span></h5>' +
+            '                        <div class="col-4 col-md-2 mt-3 pr-0 align-self-center">' +
+            '                            <h6 class="m-0 text-truncate" style="font-size:1rem;line-height:1.3rem;"><span>' + label + '<br/><span class="badge badge-info">Pin ' + pin + '</span></span></h6>' +
             '                        </div>' +
-            '                        <div class="input-group col-4 col-md-2 mt-3 pr-1 align-self-center">' +
+            '                        <div class="input-group col-4 col-md-2 mt-3 px-1 align-self-center">' +
             '                            <input class="m-0" type="checkbox" id="' + techName + 'State" data-toggle="toggle"' +
             '                                   data-on="ВКЛ" data-off="ВЫКЛ" data-width="100">' +
             '                        </div>';
@@ -63,36 +63,46 @@ let initDeviceControls = () => {
         });
     });
 
-    DEVICES.forEach(deviceInfo => {
+    const initDevices = (devicesMap) => {
 
-        addDeviceControls(deviceInfo);
+        DEVICES.forEach(deviceInfo => {
 
-        let deviceType = deviceInfo.techName;
-        let selector = '#' + deviceType + 'State';
+            const deviceType = deviceInfo.techName;
+            const deviceData = devicesMap[deviceType];
+            const completeDeviceData = Object.assign({}, deviceInfo, deviceData);
 
-        $.ajax({
-            type: "GET",
-            url: '/api/' + deviceType,
-            success: (response) => {
-                console.log('INIT: ' + deviceType + ' state: ' + response);
-                $(selector).bootstrapToggle(response);
-                $(selector).change(function() {
-                    let deviceState = $(this).prop('checked') ? 'on' : 'off';
-                    console.log('STATE CHANGED: ' + deviceType + ' state: ' + deviceState);
-                    $.ajax({
-                        type: "PUT",
-                        url: '/api/' + deviceType + '/' + deviceState,
-                        success: (response) => {
-                            toastr.success('Состояние ' + eng2rus(deviceType) + 'а изменено!');
-                        },
-                        error: (jqXHR, textStatus, errorThrown) => {
-                            toastr.error('Состояние ' + eng2rus(deviceType) + 'а не изменено: ' + textStatus);
-                            console.log(textStatus, errorThrown);
-                        }
-                    });
+            addDeviceControls(completeDeviceData);
+
+            console.log('INIT: ' + deviceType + ' state: ' + deviceData.state);
+            const selector = '#' + deviceType + 'State';
+            $(selector).bootstrapToggle(deviceData.state);
+            $(selector).change(function () {
+                let deviceState = $(this).prop('checked') ? 'on' : 'off';
+                console.log('STATE CHANGED: ' + deviceType + ' state: ' + deviceState);
+                $.ajax({
+                    type: "PUT",
+                    url: '/api/' + deviceType + '/' + deviceState,
+                    success: (response) => {
+                        toastr.success('Состояние ' + eng2rus(deviceType) + 'а изменено!');
+                    },
+                    error: (jqXHR, textStatus, errorThrown) => {
+                        toastr.error('Состояние ' + eng2rus(deviceType) + 'а не изменено: ' + textStatus);
+                        console.log(textStatus, errorThrown);
+                    }
                 });
-            },
-            error: (jqXHR, textStatus, errorThrown) => console.log(textStatus, errorThrown)
+            });
+
         });
+    };
+
+    $.ajax({
+        type: "GET",
+        url: '/api/devicesMap',
+        async: false, //TODO KEEP AN EYE ON THIS!!!
+        success: (response) => {
+            const data = JSON.parse(response);
+            initDevices(data);
+        },
+        error: (jqXHR, textStatus, errorThrown) => console.log(textStatus, errorThrown)
     });
 };
