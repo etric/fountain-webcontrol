@@ -66,7 +66,7 @@ public enum SoundExtCtrlDevice implements SwitchableDevice {
     private static GpioPinListenerDigital extCtrlListener() {
         return  event -> {
             if (event.getState().isHigh()) {
-                SoundDevice.ONE.switchState(DeviceState.on);
+                SoundDevice.ONE.switchOffForcely();
             } else {
                 //TODO restore manual state or re-sync with alarms
                 log.info("Restoring state because External Control offed");

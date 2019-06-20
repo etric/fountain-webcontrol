@@ -39,6 +39,11 @@ public enum SoundDevice implements SwitchableDevice {
         }
     }
 
+    public void switchOffForcely() {
+        SwitchableDevice.super.switchState(DeviceState.off);
+        MusicPlayer.ONE.stopPlaying();
+    }
+
     @Override
     public DeviceType getType() {
         return DeviceType.sound;
