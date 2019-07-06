@@ -62,8 +62,7 @@ let initSysDateTime = () => {
                 toastr.success('Системное время изменено!');
             },
             error: (jqXHR, textStatus, errorThrown) => {
-                toastr.error('Системное время не изменено: ' + textStatus);
-                console.log(textStatus, errorThrown);
+                toastr.error('Системное время не изменено: ' + jqXHR.responseText);
             }
         });
     });

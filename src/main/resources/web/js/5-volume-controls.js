@@ -20,8 +20,7 @@ let initVolumeControls = () => {
                         toastr.success('Громкость изменена!');
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
-                        toastr.error('Громкость не изменена: ' + textStatus);
-                        console.log(textStatus, errorThrown);
+                        toastr.error('Громкость не изменена: ' + jqXHR.responseText);
                     }
                 });
             });

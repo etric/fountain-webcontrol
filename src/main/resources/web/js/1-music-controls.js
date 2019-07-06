@@ -37,8 +37,7 @@ let initMusicControls = () => {
                         $('#pli-' + musicNumSelector.val()).text(fileName);
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
-                        toastr.error('Мелодия ' + fileName + ' не загружена: ' + textStatus);
-                        console.log(textStatus, errorThrown);
+                        toastr.error('Мелодия ' + fileName + ' не загружена: ' + jqXHR.responseText);
                     }
                 });
             }
@@ -115,8 +114,7 @@ let initMusicControls = () => {
                                     toastr.success('Пауза изменена!');
                                 },
                                 error: (jqXHR, textStatus, errorThrown) => {
-                                    toastr.error('Пауза не изменена: ' + textStatus);
-                                    console.log(textStatus, errorThrown);
+                                    toastr.error('Пауза не изменена: ' + jqXHR.responseText);
                                 }
                             });
                         }

@@ -111,13 +111,20 @@
                 <!--<div class="row p-2">-->
 
                 <div class="row mb-md-3">
-                    <div class="col-12 input-group justify-content-start">
+                    <div class="col-8 input-group justify-content-start">
                         <div class="align-self-center">
                             <h6 class="m-0 pr-3 text-center"><span>РЕЖИМ</span></h6>
                         </div>
-                        <input type="checkbox" checked data-toggle="toggle" data-on="АВТО" data-off="РУЧНОЙ"
-                               id="controlMode"
-                               data-onstyle="success" data-offstyle="danger" data-size="sm" data-width="100">
+                        <div class="align-self-center">
+                            <input type="checkbox" checked data-toggle="toggle" data-on="АВТО" data-off="РУЧНОЙ"
+                                   id="controlMode"
+                                   data-onstyle="success" data-offstyle="danger" data-size="sm" data-width="100">
+                        </div>
+                    </div>
+                    <div class="col-4 align-self-center pl-0">
+                        <button id="umfMenu" type="button" class="btn  btn-secondary float-right">
+                            <i class="fas fa-lock"></i> УМФ
+                        </button>
                     </div>
                 </div>
 
@@ -184,6 +191,7 @@
 <script src="js/4-sys-date-time.js"></script>
 <script src="js/5-volume-controls.js"></script>
 <script src="js/6-control-mode-controls.js"></script>
-<script src="js/7-finish.js"></script>
+<script src="js/7-umf-page.js"></script>
+<script src="js/99-finish.js"></script>
 </body>
 </html>

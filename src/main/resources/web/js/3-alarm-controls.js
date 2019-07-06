@@ -99,8 +99,7 @@ let initAlarmControls = () => {
                 toastr.success('Расписаниее для ' + localAlarmName + 'а изменено!');
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                toastr.error('Расписаниее для ' + localAlarmName + 'а не изменено: ' + textStatus);
-                console.log(textStatus, errorThrown);
+                toastr.error('Расписаниее для ' + localAlarmName + 'а не изменено: ' + jqXHR.responseText);
                 $(this).val(alarmPreviousValues[alarmName][alarmDay]);
             }
         });

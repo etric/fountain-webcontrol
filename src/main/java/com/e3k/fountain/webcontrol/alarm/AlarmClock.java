@@ -1,11 +1,13 @@
 package com.e3k.fountain.webcontrol.alarm;
 
 import com.e3k.fountain.webcontrol.DaysWeekMap;
+import com.e3k.fountain.webcontrol.Initializable;
 import com.e3k.fountain.webcontrol.alarm.handler.EndAlarmListener;
 import com.e3k.fountain.webcontrol.alarm.handler.SoundStartAlarmListener;
 import com.e3k.fountain.webcontrol.alarm.handler.StartAlarmListener;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
 import com.e3k.fountain.webcontrol.constant.AlarmType;
+import com.e3k.fountain.webcontrol.constant.ControlMode;
 import com.e3k.fountain.webcontrol.constant.DeviceState;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
 import com.e3k.fountain.webcontrol.io.*;
@@ -29,12 +31,23 @@ import static com.e3k.fountain.webcontrol.constant.AlarmType.*;
  * @author Alexander 'etric' Khamylov
  */
 @Slf4j
-public enum AlarmClock {
+public enum AlarmClock implements Initializable {
 
     ONE;
 
-    private final Map<AlarmType, DaysWeekMap<AlarmEntry>> alarms = initializedAlarmsMap();
+    private Map<AlarmType, DaysWeekMap<AlarmEntry>> alarms;
     private volatile AlarmManager alarmManager;
+
+    @Override
+    public void init() {
+        alarms = initializedAlarmsMap();
+        log.info("Bootstrapping AlarmClock state and Devices state...");
+        if (ControlMode.auto == PropertiesManager.ONE.getControlMode()) {
+            turnOn();
+        } else {
+            turnOff();
+        }
+    }
 
     public synchronized void turnOn() {
         if (alarmManager == null) {

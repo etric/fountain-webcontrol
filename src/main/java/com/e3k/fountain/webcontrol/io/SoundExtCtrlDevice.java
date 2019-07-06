@@ -1,5 +1,6 @@
 package com.e3k.fountain.webcontrol.io;
 
+import com.e3k.fountain.webcontrol.Initializable;
 import com.e3k.fountain.webcontrol.alarm.AlarmClock;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
 import com.e3k.fountain.webcontrol.constant.ControlMode;
@@ -13,12 +14,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 
 @Slf4j
-public enum SoundExtCtrlDevice implements SwitchableDevice {
+public enum SoundExtCtrlDevice implements SwitchableDevice, Initializable {
     ONE;
 
     private final GpioPinListenerDigital extCtrlListener = extCtrlListener();
 
-    public void registerListener() {
+    @Override
+    public void init() {
         GpioPinDigitalInput pin = PinJokey.ONE.tryGetInputPin(getType());
         if (pin == null) {
             log.warn("Sound External Control Pin was not found");

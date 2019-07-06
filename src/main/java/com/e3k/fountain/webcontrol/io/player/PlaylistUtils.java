@@ -9,7 +9,7 @@ import static java.util.Objects.requireNonNull;
 @Slf4j
 public final class PlaylistUtils {
 
-    static final int PLAYLIST_SIZE = 20;
+    public static final int PLAYLIST_SIZE = 20;
 
     private PlaylistUtils() {
         throw new AssertionError();

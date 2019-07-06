@@ -3,6 +3,7 @@
 ///////////////
 const INTERVAL_GET_SYS_DATE_TIME = 5000;
 const INTERVAL_GET_CURR_PLAYING = 5000;
+const INTERVAL_GET_BULB_STATES = 500;
 const DEVICES = [
     {techName: 'fountain', withAlarms: true},
     {techName: 'sound', withAlarms: true},
@@ -50,6 +51,3 @@ toastr.options = {
     "fadeOut": 1000,
     "timeOut": 1000
 };
-
-
-//TODO CAUTION!!! double check all usages of arrow function!!!

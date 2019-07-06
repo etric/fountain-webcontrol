@@ -1,5 +1,6 @@
 package com.e3k.fountain.webcontrol.io;
 
+import com.e3k.fountain.webcontrol.config.PropertiesManager;
 import com.e3k.fountain.webcontrol.constant.DeviceState;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
@@ -38,8 +39,9 @@ public enum SoundFreqGenDevice implements SwitchableDevice {
     public synchronized void startBlinking() {
         GpioPinDigitalOutput pin = PinJokey.ONE.tryGetOutputPin(getType());
         if (pin != null) {
-            log.info("Starting generator function");
-            pin.blink(100);
+            int delay = PropertiesManager.ONE.getBlinkDelay();
+            log.info("Starting generator function with blink delay {} ms", delay);
+            pin.blink(delay);
         }
     }
 

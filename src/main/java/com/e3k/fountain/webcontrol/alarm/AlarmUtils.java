@@ -3,7 +3,10 @@ package com.e3k.fountain.webcontrol.alarm;
 import com.e3k.fountain.webcontrol.DaysWeekMap;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
 import com.e3k.fountain.webcontrol.constant.AlarmType;
-import com.e3k.fountain.webcontrol.io.*;
+import com.e3k.fountain.webcontrol.io.FountainDevice;
+import com.e3k.fountain.webcontrol.io.LightDevice;
+import com.e3k.fountain.webcontrol.io.SoundDevice;
+import com.e3k.fountain.webcontrol.io.SwitchableDevice;
 import fr.dyade.jdring.AlarmEntry;
 import fr.dyade.jdring.AlarmListener;
 import fr.dyade.jdring.PastDateException;
@@ -13,6 +16,7 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.temporal.ChronoField;
 import java.util.Calendar;
+import java.util.Map;
 
 import static com.e3k.fountain.webcontrol.constant.AlarmType.*;
 
@@ -46,7 +50,7 @@ final class AlarmUtils {
     static DaysWeekMap<AlarmEntry> buildWeekAlarmEntries(final int defaultHour, final int defaultMinute,
                                                          AlarmListener alarmListener, AlarmType alarmType) {
 
-        DaysWeekMap<LocalTime> alarmTimeDaysWeekMap = PropertiesManager.ONE.getAlarmClocks(alarmType);
+        Map<DayOfWeek, LocalTime> alarmTimeDaysWeekMap = PropertiesManager.ONE.getAlarmClocks(alarmType);
         DaysWeekMap<AlarmEntry> result = new DaysWeekMap<>();
 
         for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
