@@ -11,7 +11,7 @@ let initDeviceControls = () => {
             '                <div class="shadow mb-2 px-3 card bg-semi-trans">' +
             '                    <div class="row pb-3">' +
             '                        <div class="col-4 col-md-2 mt-3 pr-0 align-self-center">' +
-            '                            <h6 class="m-0 text-truncate" style="font-size:1rem;line-height:1.3rem;"><span>' + label + '<br/><span class="badge badge-info">Pin ' + pin + '</span></span></h6>' +
+            '                            <h6 class="m-0 text-truncate" style="font-size:1rem;line-height:1.3rem;"><span>' + label + '</span></h6>' +
             '                        </div>' +
             '                        <div class="input-group col-4 col-md-2 mt-3 px-1 align-self-center">' +
             '                            <input class="m-0" type="checkbox" id="' + techName + 'State" data-toggle="toggle"' +
@@ -86,8 +86,7 @@ let initDeviceControls = () => {
                         toastr.success('Состояние ' + eng2rus(deviceType) + 'а изменено!');
                     },
                     error: (jqXHR, textStatus, errorThrown) => {
-                        toastr.error('Состояние ' + eng2rus(deviceType) + 'а не изменено: ' + textStatus);
-                        console.log(textStatus, errorThrown);
+                        toastr.error('Состояние ' + eng2rus(deviceType) + 'а не изменено: ' + jqXHR.responseText);
                     }
                 });
             });

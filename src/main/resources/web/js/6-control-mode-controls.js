@@ -45,8 +45,7 @@ let initControlModeControls = () => {
                                 toastr.success('Режим ' + (autoMode ? 'АВТО' : 'РУЧНОЙ') + ' установлен!');
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
-                                console.log(textStatus, errorThrown);
-                                toastr.error('Режим ' + (autoMode ? 'АВТО' : 'РУЧНОЙ') + ' не установлен: ' + textStatus);
+                                toastr.error('Режим ' + (autoMode ? 'АВТО' : 'РУЧНОЙ') + ' не установлен: ' + jqXHR.responseText);
                             }
                         });
                     } else {

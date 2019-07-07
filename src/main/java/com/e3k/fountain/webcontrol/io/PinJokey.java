@@ -1,10 +1,11 @@
 package com.e3k.fountain.webcontrol.io;
 
+import com.e3k.fountain.webcontrol.Initializable;
+import com.e3k.fountain.webcontrol.Utils;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
 import com.e3k.fountain.webcontrol.constant.DeviceState;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
 import com.pi4j.io.gpio.*;
-import com.pi4j.system.SystemInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 
@@ -14,14 +15,15 @@ import java.util.concurrent.ConcurrentMap;
 import static java.util.Objects.requireNonNull;
 
 @Slf4j
-enum PinJokey {
+public enum PinJokey implements Initializable {
 
     ONE;
 
     private final ConcurrentMap<DeviceType, GpioPinDigital> pinMappings = new ConcurrentHashMap<>();
 
-    PinJokey() {
-        if (SystemInfo.getOsName().startsWith("Linux")) {
+    @Override
+    public void init() {
+        if (Utils.isRaspberry() && pinMappings.isEmpty()) {
             GpioController gpio = GpioFactory.getInstance();
             //OUTPUT
             pinMappings.put(DeviceType.fountain, gpio.provisionDigitalOutputPin(initPin(DeviceType.fountain)));

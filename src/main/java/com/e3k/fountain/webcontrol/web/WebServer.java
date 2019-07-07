@@ -4,12 +4,11 @@ import com.e3k.fountain.webcontrol.DaysWeekMap;
 import com.e3k.fountain.webcontrol.Utils;
 import com.e3k.fountain.webcontrol.alarm.AlarmClock;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
-import com.e3k.fountain.webcontrol.constant.AlarmType;
-import com.e3k.fountain.webcontrol.constant.ControlMode;
-import com.e3k.fountain.webcontrol.constant.DeviceState;
-import com.e3k.fountain.webcontrol.constant.DeviceType;
+import com.e3k.fountain.webcontrol.constant.*;
+import com.e3k.fountain.webcontrol.io.UartDevice;
 import com.e3k.fountain.webcontrol.sysdatetime.SysDateTimeManager;
 import lombok.extern.slf4j.Slf4j;
+import spark.Route;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -32,7 +31,35 @@ public class WebServer {
         log.info("Finished setting up web server");
     }
 
+    private static Route umfAuthenticated(Route route) {
+        return (request, response) -> {
+            final String pswd = request.headers("pswd");
+            if (pswd == null || !pswd.equals(PropertiesManager.ONE.getUmfPassword())) {
+                response.status(403);
+                return "Неверный пароль!";
+            } else {
+                return route.handle(request, response);
+            }
+        };
+    }
+
     private static void setupEndpoints() {
+        // UMF
+        get("api/umf/page", umfAuthenticated((request, response) ->
+                WebServer.class.getClassLoader().getResourceAsStream("umf.html")));
+        put("api/umf/bulb/:bulbNum/:switchState", umfAuthenticated((request, response) -> {
+            final int bulbNum = Integer.parseInt(request.params(":bulbNum"));
+            final DeviceState bulbState = DeviceState.valueOf(request.params(":switchState"));
+            PropertiesManager.ONE.setUmfBulbSwitchState(bulbNum, bulbState);
+            return "OK";
+        }));
+        // for initial load
+        get("api/umf/bulb/list", umfAuthenticated((request, response) ->
+                PropertiesManager.ONE.getAllUmfBulbInfo()), new JsonResponseTransformer());
+        // for polling
+        get("api/umf/bulb/states", umfAuthenticated((request, response) ->
+                UartDevice.ONE.getBulbStates()), new JsonResponseTransformer());
+
         // DEVICES MAP
         get("/api/devicesMap", (request, response) -> {
             Map<DeviceType, Map<String, Object>> devicesMap = new HashMap<>();
@@ -48,12 +75,8 @@ public class WebServer {
 
         // CONFIG
         get("/api/config", (request, response) -> {
-            StringBuilder sb = new StringBuilder();
-            HashMap<Object, Object> props = new HashMap<>(PropertiesManager.ONE.getProperties());
-            for (Map.Entry entry : props.entrySet()) {
-                sb.append(entry.getKey()).append('=').append(entry.getValue()).append("<br/>");
-            }
-            return sb.toString();
+            response.type("application/json");
+            return PropertiesManager.ONE.dumpAppConfig();
         });
 
         // SYSTEM TIME
