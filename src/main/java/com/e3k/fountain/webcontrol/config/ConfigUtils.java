@@ -66,6 +66,15 @@ class ConfigUtils {
         }
     }
 
+    static void requireUaPhones(String phones, String msg) {
+        Objects.requireNonNull(phones, msg);
+        for (String phone : phones.split("[,;]")) {
+            if (!phone.matches("380\\d{9}")) {
+                throw new IllegalArgumentException(msg + ": " + phone + " - invalid UA phone number(s)");
+            }
+        }
+    }
+
     static byte setOrUnsetBit(byte val, int bitNum, boolean setBit) {
         bitNum = bitNum % 8;
         if (!setBit) {

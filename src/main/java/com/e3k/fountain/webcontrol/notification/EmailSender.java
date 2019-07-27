@@ -1,20 +1,18 @@
-package com.e3k.fountain.webcontrol.email;
+package com.e3k.fountain.webcontrol.notification;
 
 import com.e3k.fountain.webcontrol.Initializable;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
-import com.e3k.fountain.webcontrol.constant.BulbState;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.mail.*;
 import javax.mail.internet.MimeMessage;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Slf4j
-public enum EmailSender implements Initializable {
+enum EmailSender implements Initializable {
 
     ONE;
 
@@ -24,14 +22,12 @@ public enum EmailSender implements Initializable {
     private Session session;
     private Address sender;
     private Address[] recipients;
-    private String subject;
 
     @Override
-    public void init() {
+    public synchronized void init() {
         if (session == null) {
             sender = PropertiesManager.ONE.getUmfEmailSender();
             recipients = PropertiesManager.ONE.getUmfEmailRecipients();
-            subject = "УМФ - " + PropertiesManager.ONE.getObjectName();
 
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
@@ -49,19 +45,12 @@ public enum EmailSender implements Initializable {
         }
     }
 
-    public void sendChangedBulbsNotificationAsync(Map<String, BulbState> changedBulbsStates) {
-        executor.execute(() -> sendChangedBulbsNotification0(changedBulbsStates));
+    public void sendEmailAsync(String subject, String message) {
+        executor.execute(() -> sendEmail(subject, message));
     }
 
-    private void sendChangedBulbsNotification0(Map<String, BulbState> changedBulbsStates) {
+    private void sendEmail(String subject, String msgText) {
         final long msgNum = msgCounter.incrementAndGet();
-
-        final StringBuilder msgBuilder = new StringBuilder();
-        for (Map.Entry<String, BulbState> entry : changedBulbsStates.entrySet()) {
-            final String bulbStateText = (entry.getValue() == BulbState.red) ? "ТРЕВОГА" : "ВОССТАНОВЛЕНО";
-            msgBuilder.append(entry.getKey()).append(" - ").append(bulbStateText).append("\n");
-        }
-        final String msgText = msgBuilder.deleteCharAt(msgBuilder.length() - 1).toString();
 
         log.info("Sending #{} email", msgNum);
         try {

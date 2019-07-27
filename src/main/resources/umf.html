@@ -17,10 +17,18 @@
     <style type="text/css">
         .bulb-red { color: red; text-shadow: 0 0 1px #333; }
         .bulb-grn { color: green; text-shadow: 0 0 1px #333; }
-        #btn-close { right: 10px; top: 10px; position: absolute; }
+        #umf-label {
+            right: 100px;
+            top: 10px;
+            position: absolute;
+            color: #333;
+            text-shadow: 2px 1px 0 rgba(255,255,255,0.5);
+            font-weight: bold;
+        }
+        #btn-close { right: 50px; top: 10px; position: absolute; }
         .pulse {
-            right: 18px;
-            top: 55px;
+            right: 15px;
+            top: 13px;
             position: absolute;
             display: block;
             width: 22px;
@@ -63,11 +71,12 @@
 </head>
 <body class="m-0 bg-semi-trans">
 
-<div class="container pt-2 m-2">
+<div class="container pt-5">
+    <h4 id="umf-label">УМФ</h4>
+    <span class="pulse"></span>
     <button id="btn-close" type="button" class="btn btn-danger btn-sm" onclick="window.close();">
         <i class="fas fa-window-close fa-lg"></i>
     </button>
-    <span class="pulse"></span>
 </div>
 
 

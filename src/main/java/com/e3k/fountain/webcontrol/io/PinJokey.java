@@ -22,7 +22,7 @@ public enum PinJokey implements Initializable {
     private final ConcurrentMap<DeviceType, GpioPinDigital> pinMappings = new ConcurrentHashMap<>();
 
     @Override
-    public void init() {
+    public synchronized void init() {
         if (Utils.isRaspberry() && pinMappings.isEmpty()) {
             GpioController gpio = GpioFactory.getInstance();
             //OUTPUT

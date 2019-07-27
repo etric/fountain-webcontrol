@@ -48,15 +48,17 @@ class ConfigValidator {
 
         requireNonNull(appConfig.getUmf().getBulbs(), "umf.bulbs");
         requireState(appConfig.getUmf().getBulbs().size() == 16, "not 16 umf.bulbs");
-        final Set<String> bulbNames = new HashSet<>();
+        final Set<String> labels = new HashSet<>();
         for (int i = 1; i <= 16; i++) {
             UmfBulbConfig bulbConfig = appConfig.getUmf().getBulbs().get(i - 1);
-            requireNonNull(bulbConfig.getLabel(), "umf.bulb[" + i + "].label");
+            requireNonNull(bulbConfig.getBulbLabel(), "umf.bulb[" + i + "].label");
+            requireNonNull(bulbConfig.getSwitchLabel(), "umf.switch[" + i + "].label");
             requireNonNull(bulbConfig.getSwitchState(), "umf.bulb[" + i + "].switchState");
-            if (bulbNames.contains(bulbConfig.getLabel())) {
-                throw new IllegalStateException("Bulb " + i + " has duplicated label");
+            if (labels.contains(bulbConfig.getBulbLabel()) || labels.contains(bulbConfig.getSwitchLabel())) {
+                throw new IllegalStateException("Bulb/Switch " + i + " has duplicated label");
             }
-            bulbNames.add(bulbConfig.getLabel());
+            labels.add(bulbConfig.getSwitchLabel());
+            labels.add(bulbConfig.getBulbLabel());
         }
 
         requireNonNull(appConfig.getUmf().getEmail(), "umf.email");
@@ -64,6 +66,12 @@ class ConfigValidator {
         requireNonNull(appConfig.getUmf().getEmail().getUsername(), "umf.email.username");
         requireAddress(appConfig.getUmf().getEmail().getSender(), "umf.email.sender");
         requireAddress(appConfig.getUmf().getEmail().getRecipients(), "umf.email.recipients");
+
+        requireNonNull(appConfig.getUmf().getSms(), "umf.sms");
+        requireNonNull(appConfig.getUmf().getSms().getPassword(), "umf.sms.password");
+        requireNonNull(appConfig.getUmf().getSms().getUsername(), "umf.sms.username");
+        requireNonNull(appConfig.getUmf().getSms().getAlphaName(), "umf.sms.alphaName");
+        requireUaPhones(appConfig.getUmf().getSms().getRecipients(), "umf.sms.recipients");
     }
 
     private static void validateDevices(AppConfig appConfig) {

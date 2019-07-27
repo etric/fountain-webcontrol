@@ -97,6 +97,7 @@ body {
 #brand-logo-min {
     width: 250px;
     /*height: 50%;*/
+    content:url("../../api/file/logo_min.jpg");
 }
 
 #brand-logo-container-min {
@@ -142,6 +143,7 @@ body {
         display: inline-block;
         width: 200px;
         height: 113px;
+        content:url("../../api/file/logo.jpg");
     }
 
     #brand-logo-container {

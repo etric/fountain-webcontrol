@@ -39,7 +39,7 @@ public enum AlarmClock implements Initializable {
     private volatile AlarmManager alarmManager;
 
     @Override
-    public void init() {
+    public synchronized void init() {
         alarms = initializedAlarmsMap();
         log.info("Bootstrapping AlarmClock state and Devices state...");
         if (ControlMode.auto == PropertiesManager.ONE.getControlMode()) {

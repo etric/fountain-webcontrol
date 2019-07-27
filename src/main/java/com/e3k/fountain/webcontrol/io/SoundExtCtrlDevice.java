@@ -20,7 +20,7 @@ public enum SoundExtCtrlDevice implements SwitchableDevice, Initializable {
     private final GpioPinListenerDigital extCtrlListener = extCtrlListener();
 
     @Override
-    public void init() {
+    public synchronized void init() {
         GpioPinDigitalInput pin = PinJokey.ONE.tryGetInputPin(getType());
         if (pin == null) {
             log.warn("Sound External Control Pin was not found");

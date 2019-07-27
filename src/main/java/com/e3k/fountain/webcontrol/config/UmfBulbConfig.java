@@ -13,7 +13,20 @@ public class UmfBulbConfig {
     @Setter(AccessLevel.PACKAGE)
     private DeviceState switchState;
 
-    private String label;
-    private boolean sendEmail;
+    private String switchLabel;
+    private String bulbLabel;
+    private boolean notifyOnChange;
 
+    private volatile String fullLabel = null;
+
+    public String getFullLabel() {
+        if (fullLabel == null) {
+            synchronized (this) {
+                if (fullLabel == null) {
+                    fullLabel = switchLabel + "/" + bulbLabel;
+                }
+            }
+        }
+        return fullLabel;
+    }
 }

@@ -19,86 +19,108 @@
       "sender": "servicevater@gmail.com",
       "recipients": "etric1@gmail.com"
     },
+    "sms": {
+      "username": "380680468836",
+      "password": "63rtn98",
+      "alphaName": "infomir",
+      "recipients": "380952593469"
+    },
     "bulbs": [
       {
         "switchState": "off",
-        "label": "Лампа 1",
-        "sendEmail": true
+        "switchLabel": "Лампа 1",
+        "bulbLabel": "Лампа 1",
+        "notifyOnChange": true
       },
       {
         "switchState": "on",
-        "label": "Лампа 2",
-        "sendEmail": true
+        "switchLabel": "Лампа 2",
+        "bulbLabel": "Лампа 2",
+        "notifyOnChange": true
       },
       {
         "switchState": "on",
-        "label": "Лампа 3",
-        "sendEmail": true
+        "switchLabel": "Лампа 3",
+        "bulbLabel": "Лампа 3",
+        "notifyOnChange": true
       },
       {
         "switchState": "off",
-        "label": "Лампа 4",
-        "sendEmail": true
+        "switchLabel": "Лампа 4",
+        "bulbLabel": "Лампа 4",
+        "notifyOnChange": true
       },
       {
         "switchState": "on",
-        "label": "Лампа 5",
-        "sendEmail": true
+        "switchLabel": "Лампа 5",
+        "bulbLabel": "Лампа 5",
+        "notifyOnChange": true
       },
       {
         "switchState": "off",
-        "label": "Лампа 6",
-        "sendEmail": true
+        "switchLabel": "Лампа 6",
+        "bulbLabel": "Лампа 6",
+        "notifyOnChange": true
       },
       {
         "switchState": "off",
-        "label": "Лампа 77",
-        "sendEmail": true
+        "switchLabel": "Лампа 77",
+        "bulbLabel": "Лампа 77",
+        "notifyOnChange": true
       },
       {
         "switchState": "on",
-        "label": "Лампа 8",
-        "sendEmail": true
-      },
-      {
-        "switchState": "on",
-        "label": "Лампа 9",
-        "sendEmail": true
+        "switchLabel": "Лампа 8",
+        "bulbLabel": "Лампа 8",
+        "notifyOnChange": true
       },
       {
         "switchState": "off",
-        "label": "Лампа 10",
-        "sendEmail": true
-      },
-      {
-        "switchState": "on",
-        "label": "Лампа 11",
-        "sendEmail": true
+        "switchLabel": "Лампа 9",
+        "bulbLabel": "Лампа 9",
+        "notifyOnChange": true
       },
       {
         "switchState": "off",
-        "label": "Лампа 12",
-        "sendEmail": true
-      },
-      {
-        "switchState": "off",
-        "label": "Лампа 13",
-        "sendEmail": true
-      },
-      {
-        "switchState": "off",
-        "label": "Лампа 14",
-        "sendEmail": true
+        "switchLabel": "Лампа 10",
+        "bulbLabel": "Лампа 10",
+        "notifyOnChange": true
       },
       {
         "switchState": "on",
-        "label": "Лампа 15",
-        "sendEmail": true
+        "switchLabel": "Лампа 11",
+        "bulbLabel": "Лампа 11",
+        "notifyOnChange": true
+      },
+      {
+        "switchState": "off",
+        "switchLabel": "Лампа 12",
+        "bulbLabel": "Лампа 12",
+        "notifyOnChange": true
+      },
+      {
+        "switchState": "off",
+        "switchLabel": "Лампа 13",
+        "bulbLabel": "Лампа 13",
+        "notifyOnChange": true
+      },
+      {
+        "switchState": "off",
+        "switchLabel": "Лампа 14",
+        "bulbLabel": "Лампа 14",
+        "notifyOnChange": true
       },
       {
         "switchState": "on",
-        "label": "Лампа 16",
-        "sendEmail": true
+        "switchLabel": "Лампа 15",
+        "bulbLabel": "Лампа 15",
+        "notifyOnChange": true
+      },
+      {
+        "switchState": "on",
+        "switchLabel": "Лампа 16",
+        "bulbLabel": "Лампа 16",
+        "notifyOnChange": true
       }
     ]
   },

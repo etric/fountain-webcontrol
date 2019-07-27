@@ -42,9 +42,10 @@ public enum PropertiesManager implements Initializable {
     private AppConfig appConfig;
 
     @Override
-    public void init() {
+    public synchronized void init() {
         if (appConfig == null) {
             loadConfig();
+            log.info("Validating Config...");
             validate(this.appConfig);
             initUartUserMessage();
         }
@@ -175,6 +176,10 @@ public enum PropertiesManager implements Initializable {
 
     public List<UmfBulbConfig> getAllUmfBulbInfo() {
         return Collections.unmodifiableList(appConfig.getUmf().getBulbs());
+    }
+
+    public UmfSmsConfig getUmfSmsConfig() {
+        return appConfig.getUmf().getSms();
     }
 
     // SETTERS

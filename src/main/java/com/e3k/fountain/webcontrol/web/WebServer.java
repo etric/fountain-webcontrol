@@ -11,8 +11,12 @@ import com.e3k.fountain.webcontrol.io.player.PlaylistUtils;
 import com.e3k.fountain.webcontrol.sysdatetime.SysDateTimeManager;
 import lombok.extern.slf4j.Slf4j;
 import spark.Route;
+import spark.utils.IOUtils;
 
 import javax.servlet.MultipartConfigElement;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -47,6 +51,16 @@ public class WebServer {
     }
 
     private static void setupEndpoints() {
+        // FILES (e.g. logo)
+        get("api/file/:fileName", ((request, response) -> {
+            try (InputStream inputStream = new FileInputStream(request.params("fileName"));
+                 OutputStream outputStream = response.raw().getOutputStream()
+            ) {
+                IOUtils.copy(inputStream, outputStream);
+                outputStream.flush();
+            }
+            return response.raw();
+        }));
         // UMF
         get("api/umf/page", umfAuthenticated((request, response) ->
                 WebServer.class.getClassLoader().getResourceAsStream("umf.html")));

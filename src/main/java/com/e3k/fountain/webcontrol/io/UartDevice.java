@@ -5,7 +5,7 @@ import com.e3k.fountain.webcontrol.Utils;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
 import com.e3k.fountain.webcontrol.config.UmfBulbConfig;
 import com.e3k.fountain.webcontrol.constant.BulbState;
-import com.e3k.fountain.webcontrol.email.EmailSender;
+import com.e3k.fountain.webcontrol.notification.NotificationSender;
 import com.pi4j.io.serial.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -28,7 +28,7 @@ public enum UartDevice implements Initializable {
     private Serial serial;
 
     @Override
-    public void init() throws IOException, InterruptedException {
+    public synchronized void init() throws IOException, InterruptedException {
         if (Utils.isRaspberry()) {
 
             umfBulbs = PropertiesManager.ONE.getAllUmfBulbInfo();
@@ -39,6 +39,8 @@ public enum UartDevice implements Initializable {
             //       except the 3B, it will return "/dev/ttyAMA0".  For Raspberry Pi
             //       model 3B may return "/dev/ttyS0" or "/dev/ttyAMA0" depending on
             //       environment configuration.
+
+            log.info("Initializing UART communication channel");
 
             this.serial = SerialFactory.createInstance();
             final SerialConfig config = new SerialConfig()
@@ -105,21 +107,23 @@ public enum UartDevice implements Initializable {
 
     private void sendChangedBulbsNotification(BulbState[] newBulbStates) {
         Map<String, BulbState> changedBulbsData = null;
+        boolean atLeastOneNotifiableChanged = false;
         for (int i = 0; i < newBulbStates.length; i++) {
-            BulbState oldBulbState = this.bulbStates[i];
-            BulbState newBulbState = newBulbStates[i];
-            if (oldBulbState == newBulbState) {
-                continue;
-            }
-            if (umfBulbs.get(i).isSendEmail()) {
+            final BulbState oldBulbState = this.bulbStates[i];
+            final BulbState newBulbState = newBulbStates[i];
+            final UmfBulbConfig bulbCfg = umfBulbs.get(i);
+            if (bulbCfg.isNotifyOnChange()) {
                 if (changedBulbsData == null) {
                     changedBulbsData = new LinkedHashMap<>(16);
                 }
-                changedBulbsData.put(umfBulbs.get(i).getLabel(), newBulbState);
+                changedBulbsData.put(bulbCfg.getFullLabel(), newBulbState);
+                if (oldBulbState != newBulbState) {
+                    atLeastOneNotifiableChanged = true;
+                }
             }
         }
-        if (changedBulbsData != null) {
-            EmailSender.ONE.sendChangedBulbsNotificationAsync(changedBulbsData);
+        if (atLeastOneNotifiableChanged) {
+            NotificationSender.ONE.sendNotification(changedBulbsData);
         }
     }
 //

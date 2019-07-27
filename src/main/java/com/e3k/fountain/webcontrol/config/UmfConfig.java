@@ -17,11 +17,12 @@ class UmfConfig {
     private String flowControl = "NONE";
     private String password = "1234";
     private UmfEmailConfig email = new UmfEmailConfig();
+    private UmfSmsConfig sms = new UmfSmsConfig();
     private List<UmfBulbConfig> bulbs = defaultBulbsConfig();
 
     private static List<UmfBulbConfig> defaultBulbsConfig() {
         return IntStream.range(1, 17).boxed()
-                .map(i -> new UmfBulbConfig(DeviceState.off, "Лампа " + i, false))
+                .map(i -> new UmfBulbConfig(DeviceState.off, "Кнопка " + i, "Лампа " + i, false, null))
                 .collect(Collectors.toList());
     }
 
