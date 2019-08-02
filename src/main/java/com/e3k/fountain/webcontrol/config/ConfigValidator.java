@@ -67,11 +67,13 @@ class ConfigValidator {
         requireAddress(appConfig.getUmf().getEmail().getSender(), "umf.email.sender");
         requireAddress(appConfig.getUmf().getEmail().getRecipients(), "umf.email.recipients");
 
-        requireNonNull(appConfig.getUmf().getSms(), "umf.sms");
-        requireNonNull(appConfig.getUmf().getSms().getPassword(), "umf.sms.password");
-        requireNonNull(appConfig.getUmf().getSms().getUsername(), "umf.sms.username");
-        requireNonNull(appConfig.getUmf().getSms().getAlphaName(), "umf.sms.alphaName");
-        requireUaPhones(appConfig.getUmf().getSms().getRecipients(), "umf.sms.recipients");
+        if (!appConfig.getUmf().getSms().isDisabled()) {
+            requireNonNull(appConfig.getUmf().getSms(), "umf.sms");
+            requireNonNull(appConfig.getUmf().getSms().getPassword(), "umf.sms.password");
+            requireNonNull(appConfig.getUmf().getSms().getUsername(), "umf.sms.username");
+            requireNonNull(appConfig.getUmf().getSms().getAlphaName(), "umf.sms.alphaName");
+            requireUaPhones(appConfig.getUmf().getSms().getRecipients(), "umf.sms.recipients");
+        }
     }
 
     private static void validateDevices(AppConfig appConfig) {

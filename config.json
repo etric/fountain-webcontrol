@@ -1,6 +1,6 @@
 {
   "controlMode": "manual",
-  "pauseBetweenTracks": 0,
+  "pauseBetweenTracks": 2,
   "lastPlayedItem": -1,
   "volume": 50,
   "object": "Подвал номер 5",
@@ -18,12 +18,6 @@
       "password": "1q2W3e4R",
       "sender": "servicevater@gmail.com",
       "recipients": "etric1@gmail.com"
-    },
-    "sms": {
-      "username": "380680468836",
-      "password": "63rtn98",
-      "alphaName": "infomir",
-      "recipients": "380952593469"
     },
     "bulbs": [
       {

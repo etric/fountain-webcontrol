@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public class UmfSmsConfig {
 
+    private boolean disabled = true;
     private String username = "";
     private String password = "";
     private String alphaName = "";

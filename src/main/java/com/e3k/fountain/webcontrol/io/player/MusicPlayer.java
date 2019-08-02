@@ -93,18 +93,14 @@ public enum MusicPlayer implements BasicPlayerListener {
     }
 
     public synchronized void stopPlaying() {
-        if (audioPlayer.getStatus() != BasicPlayer.STOPPED) {
-            log.info("Stopping player");
-            try {
-                audioPlayer.stop();
-                nowPlaying = -1;
-                SoundIndicatorDevice.ONE.switchState(DeviceState.off);
-                SoundFreqGenDevice.ONE.stopBlinking();
-            } catch (BasicPlayerException e) {
-                log.error("Failed stopping player", e);
-            }
-        } else {
-            log.warn("Cannot stop player - already stopped!");
+        log.info("Stopping player");
+        try {
+            audioPlayer.stop();
+            nowPlaying = -1;
+            SoundIndicatorDevice.ONE.switchState(DeviceState.off);
+            SoundFreqGenDevice.ONE.stopBlinking();
+        } catch (Exception e) {
+            log.error("Failed stopping player", e);
         }
     }
 
@@ -144,13 +140,18 @@ public enum MusicPlayer implements BasicPlayerListener {
             if (pauseBetweenTracks > 0) {
                 SoundIndicatorDevice.ONE.switchState(DeviceState.off);
                 SoundFreqGenDevice.ONE.stopBlinking();
+                log.debug("Pause between tracks...");
                 try {
                     TimeUnit.SECONDS.sleep(pauseBetweenTracks);
                 } catch (InterruptedException e) {
                     log.error("Failed pausing between tracks", e);
                 }
             }
-            playItem(nowPlaying + 1);
+            if (nowPlaying != -1) { //check if was stopped during pause
+                playItem(nowPlaying + 1);
+            } else {
+                log.debug("MusicPlayer has been stopped during pause..");
+            }
         }
     }
 
