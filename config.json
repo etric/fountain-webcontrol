@@ -5,6 +5,9 @@
   "volume": 50,
   "object": "Подвал номер 5",
   "blinkDelayMs": 100,
+  "httpPort": 9191,
+  "playFromStartOnModeSwitch": false,
+  "soundDevicesEnabled": true,
   "umf": {
     "baudRate": 9600,
     "dataBits": 8,
