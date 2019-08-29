@@ -6,7 +6,7 @@
 
     <groupId>com.e3k</groupId>
     <artifactId>fountain-webcontrol</artifactId>
-    <version>3.1-umf</version>
+    <version>4.0</version>
 
     <build>
         <plugins>
@@ -34,6 +34,9 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <mainClass>com.e3k.fountain.webcontrol.EntryPoint</mainClass>
+                            <addDefaultImplementationEntries>
+                                true
+                            </addDefaultImplementationEntries>
                         </manifest>
                     </archive>
                     <descriptorRefs>

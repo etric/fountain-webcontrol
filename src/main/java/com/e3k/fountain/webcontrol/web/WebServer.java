@@ -61,26 +61,33 @@ public class WebServer {
             }
             return response.raw();
         }));
+
         // UMF
+        get("umf-unsafe", (request, response) ->
+                WebServer.class.getClassLoader().getResourceAsStream("umf.html"));
+
         get("api/umf/page", umfAuthenticated((request, response) ->
                 WebServer.class.getClassLoader().getResourceAsStream("umf.html")));
-        put("api/umf/bulb/:bulbNum/:switchState", umfAuthenticated((request, response) -> {
+        put("api/umf/bulb/:bulbNum/:switchState", (request, response) -> {
             final int bulbNum = Integer.parseInt(request.params(":bulbNum"));
             final DeviceState bulbState = DeviceState.valueOf(request.params(":switchState"));
             PropertiesManager.ONE.setUmfBulbSwitchState(bulbNum, bulbState);
             return "OK";
-        }));
+        });
         // for initial load
-        get("api/umf/bulb/list", umfAuthenticated((request, response) ->
-                PropertiesManager.ONE.getAllUmfBulbInfo()), new JsonResponseTransformer());
+        get("api/umf/bulb/list", (request, response) ->
+                PropertiesManager.ONE.getAllUmfBulbInfo(), new JsonResponseTransformer());
         // for polling
-        get("api/umf/bulb/states", umfAuthenticated((request, response) ->
-                UartDevice.ONE.getBulbStates()), new JsonResponseTransformer());
+        get("api/umf/bulb/states", (request, response) ->
+                UartDevice.ONE.getBulbStates(), new JsonResponseTransformer());
 
         // DEVICES MAP
         get("/api/devicesMap", (request, response) -> {
             Map<DeviceType, Map<String, Object>> devicesMap = new HashMap<>();
             for (DeviceType deviceType : DeviceType.values()) {
+                if (deviceType.isSoundRelated() && !PropertiesManager.ONE.isSoundDevicesEnabled()) {
+                    continue; //skip
+                }
                 Map<String, Object> data = new HashMap<>();
                 data.put("label", PropertiesManager.ONE.getLabel(deviceType));
                 data.put("pin", PropertiesManager.ONE.getDevicePin(deviceType));
@@ -104,6 +111,82 @@ public class WebServer {
             return "OK";
         });
 
+        // CONTROL MODE AUTO/MANUAL
+        get("/api/mode", (request, response) -> {
+            final ControlMode controlMode = PropertiesManager.ONE.getControlMode();
+            response.status(200);
+            return controlMode.name();
+        });
+        put("/api/mode/:modeAuto", (request, response) -> {
+            final ControlMode mode = ControlMode.valueOf(request.params(":modeAuto"));
+            final ControlMode oldMode = PropertiesManager.ONE.getControlMode();
+            if (mode != oldMode) {
+                log.info("Changing Control Mode: {}", mode);
+                if (ControlMode.auto == mode) {
+                    if (PropertiesManager.ONE.isPlayFromStartOnModeSwitch()) {
+                        PropertiesManager.ONE.setLastPlayedItem(-1);
+                    }
+                    AlarmClock.ONE.turnOn();
+                } else if (ControlMode.manual == mode){
+                    AlarmClock.ONE.turnOff();
+                }
+                PropertiesManager.ONE.setControlMode(mode);
+            }
+            response.status(200);
+            return "OK";
+        });
+
+        // ALARMS CLOCK
+        get("/api/alarm/:alarmName", (request, response) -> {
+            final AlarmType alarmType = AlarmType.valueOf(request.params(":alarmName"));
+            checkSoundRelated(alarmType);
+            final DaysWeekMap<String> weekAlarms = AlarmClock.ONE.getWeekAlarms(alarmType);
+            response.status(200);
+            return weekAlarms;
+        }, new JsonResponseTransformer());
+        put("/api/alarm/:alarmName/:dayOfWeek", (request, response) -> {
+            final AlarmType alarmType = AlarmType.valueOf(request.params(":alarmName"));
+            checkSoundRelated(alarmType);
+            final DayOfWeek dayOfWeek = DayOfWeek.valueOf(request.params(":dayOfWeek"));
+            try {
+                LocalTime time = Utils.stringToTime(request.body());
+                AlarmClock.ONE.updateTime(dayOfWeek, alarmType, time);
+                response.status(200);
+                return "OK";
+            } catch (DateTimeParseException ex) {
+                response.status(400);
+                return "Wrong time format (HH:mm)";
+            }
+        });
+
+        // DEVICES ON/OFF
+        get("/api/device/:deviceType", (request, response) -> {
+            final DeviceType deviceType = DeviceType.valueOf(request.params(":deviceType"));
+            checkSoundRelated(deviceType);
+            return PropertiesManager.ONE.getDeviceManualState(deviceType);
+        });
+        put("/api/device/:deviceType/:modeOn", (request, response) -> {
+            final DeviceType deviceType = DeviceType.valueOf(request.params(":deviceType"));
+            checkSoundRelated(deviceType);
+            final DeviceState deviceState = DeviceState.valueOf(request.params(":modeOn"));
+            PropertiesManager.ONE.setDeviceManualState(deviceType, deviceState);
+            if (PropertiesManager.ONE.getControlMode() == ControlMode.manual) {
+                Utils.deviceByType(deviceType).switchState(deviceState);
+            }
+            response.status(200);
+            return "OK";
+        });
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////// MUSIC-RELATED //////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+        if (!PropertiesManager.ONE.isSoundDevicesEnabled()) {
+            return;
+        }
+
         // MUSIC
         get("/api/music/currentPlayingItem", (request, response) -> {
             response.status(200);
@@ -119,7 +202,7 @@ public class WebServer {
             final int techNum = realNum - 1;
             if (!PlaylistUtils.isValidMusicNum(techNum)) {
                 response.status(400);
-                return "Music # must be within range 1..20";
+                return "Music # must be within range 1.." + PlaylistUtils.PLAYLIST_SIZE;
             }
             if (MusicPlayer.ONE.getCurrentPlayingItem() == techNum) {
                 response.status(400);
@@ -129,25 +212,6 @@ public class WebServer {
                     new MultipartConfigElement("/temp"));
 
             MusicUploadHelper.upload(request.raw().getPart("file"), realNum);
-            response.status(200);
-            return "OK";
-        });
-
-        // CONTROL MODE AUTO/MANUAL
-        get("/api/mode", (request, response) -> {
-            final ControlMode controlMode = PropertiesManager.ONE.getControlMode();
-            response.status(200);
-            return controlMode.name();
-        });
-        put("/api/mode/:modeAuto", (request, response) -> {
-            final ControlMode mode = ControlMode.valueOf(request.params(":modeAuto"));
-            log.info("Changing Control Mode: {}", mode);
-            if (ControlMode.auto == mode) {
-                AlarmClock.ONE.turnOn();
-            } else if (ControlMode.manual == mode){
-                AlarmClock.ONE.turnOff();
-            }
-            PropertiesManager.ONE.setControlMode(mode);
             response.status(200);
             return "OK";
         });
@@ -185,42 +249,17 @@ public class WebServer {
             response.status(200);
             return "OK";
         });
+    }
 
-        // ALARMS CLOCK
-        get("/api/alarm/:alarmName", (request, response) -> {
-            final AlarmType alarmType = AlarmType.valueOf(request.params(":alarmName"));
-            final DaysWeekMap<String> weekAlarms = AlarmClock.ONE.getWeekAlarms(alarmType);
-            response.status(200);
-            return weekAlarms;
-        }, new JsonResponseTransformer());
-        put("/api/alarm/:alarmName/:dayOfWeek", (request, response) -> {
-            final AlarmType alarmType = AlarmType.valueOf(request.params(":alarmName"));
-            final DayOfWeek dayOfWeek = DayOfWeek.valueOf(request.params(":dayOfWeek"));
-            try {
-                LocalTime time = Utils.stringToTime(request.body());
-                AlarmClock.ONE.updateTime(dayOfWeek, alarmType, time);
-                response.status(200);
-                return "OK";
-            } catch (DateTimeParseException ex) {
-                response.status(400);
-                return "Wrong time format (HH:mm)";
-            }
-        });
+    private static void checkSoundRelated(AlarmType alarmType) {
+        if (alarmType.isSoundRelated() && !PropertiesManager.ONE.isSoundDevicesEnabled()) {
+            throw new IllegalArgumentException("Будильники музыки не подерживаются");
+        }
+    }
 
-        // DEVICES ON/OFF
-        get("/api/:deviceType", (request, response) -> {
-            final DeviceType deviceType = DeviceType.valueOf(request.params(":deviceType"));
-            return PropertiesManager.ONE.getDeviceManualState(deviceType);
-        });
-        put("/api/:deviceType/:modeOn", (request, response) -> {
-            final DeviceType deviceType = DeviceType.valueOf(request.params(":deviceType"));
-            final DeviceState deviceState = DeviceState.valueOf(request.params(":modeOn"));
-            PropertiesManager.ONE.setDeviceManualState(deviceType, deviceState);
-            if (PropertiesManager.ONE.getControlMode() == ControlMode.manual) {
-                Utils.deviceByType(deviceType).switchState(deviceState);
-            }
-            response.status(200);
-            return "OK";
-        });
+    private static void checkSoundRelated(DeviceType deviceType) {
+        if (deviceType.isSoundRelated() && !PropertiesManager.ONE.isSoundDevicesEnabled()) {
+            throw new IllegalArgumentException("Функции музыки не подерживаются");
+        }
     }
 }

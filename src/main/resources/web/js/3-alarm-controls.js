@@ -2,7 +2,7 @@
 // ALARM TIME PICKERS //
 ////////////////////////
 
-let initAlarmControls = () => {
+let initAlarmControls = (soundDevicesEnabled) => {
 
     let alarmsWeekData = {};
     let alarmPreviousValues = {};
@@ -115,7 +115,7 @@ let initAlarmControls = () => {
         $('#' + alarmEndType).val(alarmsWeekData[alarmEndType][selectedAlarmDay]);
     };
 
-    DEVICES_WITH_ALARMS.forEach(deviceInfo => {
+    getDevices(true, soundDevicesEnabled).forEach(deviceInfo => {
         let alarmStartType = deviceInfo.techName + 'AlarmStart';
         let alarmEndType = deviceInfo.techName + 'AlarmEnd';
         let alarmDay = deviceInfo.techName + 'AlarmDay';

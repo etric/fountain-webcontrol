@@ -4,7 +4,7 @@
 const INTERVAL_GET_SYS_DATE_TIME = 5000;
 const INTERVAL_GET_CURR_PLAYING = 5000;
 const INTERVAL_GET_BULB_STATES = 500;
-const DEVICES = [
+const ALL_DEVICES = [
     {techName: 'fountain', withAlarms: true},
     {techName: 'sound', withAlarms: true},
     {techName: 'light', withAlarms: true},
@@ -15,12 +15,23 @@ const DEVICES = [
     {techName: 'auxGpio5', withAlarms: false},
     {techName: 'auxGpio6', withAlarms: false}
 ];
-const DEVICES_WITH_ALARMS = DEVICES.filter(i => i.withAlarms);
+
+const getDevices = (withAlarmsOnly, soundDevicesEnabled) => {
+    return ALL_DEVICES.filter(i => {
+        if (withAlarmsOnly && i.withAlarms === false) {
+            return false;
+        }
+        if (soundDevicesEnabled === false && i.techName === 'sound') {
+            return false;
+        }
+        return true;
+    });
+};
 
 ///////////
 // UTILS //
 ///////////
-let eng2rus = (device) => {
+const eng2rus = (device) => {
     if (device.startsWith('fountain')) {
         return 'фонтан';
     } else if (device.startsWith('light')) {
@@ -30,11 +41,7 @@ let eng2rus = (device) => {
     }
     return device;
 };
-let isTabletWidth = () => {
-    let cssDisplay = $('#tablet-indicator').css('display');
-    return cssDisplay === 'block';
-};
-let alarmDayByAlarmName = (alarmName) =>{
+const alarmDayByAlarmName = (alarmName) =>{
     return $('#' + alarmName.replace('AlarmStart', '').replace('AlarmEnd', '') + 'AlarmDay').val();
 };
 

@@ -9,28 +9,20 @@ import com.e3k.fountain.webcontrol.notification.NotificationSender;
 import com.e3k.fountain.webcontrol.web.WebServer;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Slf4j
 public class EntryPoint {
 
-    //ORDER IS IMPORTANT !!!
-    //ORDER IS IMPORTANT !!!
-    //ORDER IS IMPORTANT !!!
-    private static final List<Initializable> initializables = Arrays.asList(
-            PropertiesManager.ONE,
-            PinJokey.ONE,
-            NotificationSender.ONE,
-            UartDevice.ONE,
-            AlarmClock.ONE,
-            SoundExtCtrlDevice.ONE
-    );
-
     public static void main(String args[]) throws Exception {
         try {
-            for (Initializable item : initializables) {
-                item.init();
+            //ORDER IS IMPORTANT !!!
+            PropertiesManager.ONE.init();
+            PinJokey.ONE.init();
+            NotificationSender.ONE.init();
+            UartDevice.ONE.init();
+            AlarmClock.ONE.init();
+
+            if (PropertiesManager.ONE.isSoundDevicesEnabled()) {
+                SoundExtCtrlDevice.ONE.init();
             }
             // start web server
             WebServer.bootstrap();
@@ -40,5 +32,4 @@ public class EntryPoint {
             throw ex;
         }
     }
-
 }

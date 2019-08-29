@@ -53,7 +53,9 @@ public enum AlarmClock implements Initializable {
         if (alarmManager == null) {
             log.info("Turning Alarms ON");
             reSyncDeviceStateWithAlarms(FountainDevice.ONE);
-            reSyncDeviceStateWithAlarms(SoundDevice.ONE);
+            if (PropertiesManager.ONE.isSoundDevicesEnabled()) {
+                reSyncDeviceStateWithAlarms(SoundDevice.ONE);
+            }
             reSyncDeviceStateWithAlarms(LightDevice.ONE);
             //TODO maybe do not create AlarmManager each time,
             // but keep it running with single dummy Alarm ?
@@ -82,7 +84,9 @@ public enum AlarmClock implements Initializable {
             alarmManager = null;
         }
         LightDevice.ONE.restoreState();
-        SoundDevice.ONE.restoreState();
+        if (PropertiesManager.ONE.isSoundDevicesEnabled()) {
+            SoundDevice.ONE.restoreState();
+        }
         FountainDevice.ONE.restoreState();
     }
 
@@ -162,8 +166,10 @@ public enum AlarmClock implements Initializable {
         putAlarmStartMapping(map, lightAlarmStart, LightDevice.ONE);
         putAlarmEndMapping(map, lightAlarmEnd, LightDevice.ONE);
 
-        putAlarmStartMapping(map, soundAlarmStart, new SoundStartAlarmListener());
-        putAlarmEndMapping(map, soundAlarmEnd, SoundDevice.ONE);
+        if (PropertiesManager.ONE.isSoundDevicesEnabled()) {
+            putAlarmStartMapping(map, soundAlarmStart, new SoundStartAlarmListener());
+            putAlarmEndMapping(map, soundAlarmEnd, SoundDevice.ONE);
+        }
 
         return Collections.unmodifiableMap(map);
     }
@@ -186,7 +192,7 @@ public enum AlarmClock implements Initializable {
         } else if (deviceType == DeviceType.light) {
             alarmStart = alarms.get(lightAlarmStart).get(dayOfWeek);
             alarmEnd = alarms.get(lightAlarmEnd).get(dayOfWeek);
-        } else if (deviceType == DeviceType.sound) {
+        } else if (deviceType == DeviceType.sound && PropertiesManager.ONE.isSoundDevicesEnabled()) {
             alarmStart = alarms.get(soundAlarmStart).get(dayOfWeek);
             alarmEnd = alarms.get(soundAlarmEnd).get(dayOfWeek);
         } else {

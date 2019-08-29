@@ -2,7 +2,7 @@
 // FOUNTAIN/LIGHT/SOUND/AUX SWITCHES //
 ///////////////////////////////////////
 
-let initDeviceControls = () => {
+let initDeviceControls = (soundDevicesEnabled) => {
 
     let addDeviceControls = (completeDeviceData) => {
         const {label, pin, techName, withAlarms} = completeDeviceData;
@@ -56,7 +56,7 @@ let initDeviceControls = () => {
 
     $('#commonAlarmDay').change(function() {
         let selectedAlarmDay = $(this).val();
-        DEVICES_WITH_ALARMS.forEach(deviceInfo => {
+        getDevices(true, soundDevicesEnabled).forEach(deviceInfo => {
             let alarmDay = $('#' + deviceInfo.techName + 'AlarmDay');
             alarmDay.val(selectedAlarmDay);
             alarmDay.change();
@@ -65,8 +65,7 @@ let initDeviceControls = () => {
 
     const initDevices = (devicesMap) => {
 
-        DEVICES.forEach(deviceInfo => {
-
+        getDevices(false, soundDevicesEnabled).forEach(deviceInfo => {
             const deviceType = deviceInfo.techName;
             const deviceData = devicesMap[deviceType];
             const completeDeviceData = Object.assign({}, deviceInfo, deviceData);
@@ -81,7 +80,7 @@ let initDeviceControls = () => {
                 console.log('STATE CHANGED: ' + deviceType + ' state: ' + deviceState);
                 $.ajax({
                     type: "PUT",
-                    url: '/api/' + deviceType + '/' + deviceState,
+                    url: '/api/device/' + deviceType + '/' + deviceState,
                     success: (response) => {
                         toastr.success('Состояние ' + eng2rus(deviceType) + 'а изменено!');
                     },

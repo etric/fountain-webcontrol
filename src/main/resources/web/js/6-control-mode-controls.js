@@ -2,10 +2,10 @@
 // CONTROL MODE //
 //////////////////
 
-let initControlModeControls = () => {
+let initControlModeControls = (soundDevicesEnabled) => {
 
     let changeAllDevicesSwitchState = (autoMode) => {
-        DEVICES_WITH_ALARMS.forEach(deviceInfo => {
+        getDevices(true, soundDevicesEnabled).forEach(deviceInfo => {
             let deviceType = deviceInfo.techName;
             let stateElem = $('#' + deviceType + 'State');
 

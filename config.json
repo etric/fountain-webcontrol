@@ -19,6 +19,12 @@
       "sender": "servicevater@gmail.com",
       "recipients": "etric1@gmail.com"
     },
+    "sms": {
+      "username": "380680468836",
+      "password": "63rtn98",
+      "alphaName": "infomir",
+      "recipients": "380952593469"
+    },
     "bulbs": [
       {
         "switchState": "off",
@@ -39,7 +45,7 @@
         "notifyOnChange": true
       },
       {
-        "switchState": "off",
+        "switchState": "on",
         "switchLabel": "Лампа 4",
         "bulbLabel": "Лампа 4",
         "notifyOnChange": true

@@ -39,9 +39,6 @@ enum SmsSender implements Initializable {
 
     @Override
     public synchronized void init() throws Exception {
-        if (isDisabled()) {
-            return;
-        }
         if (httpClient.isStopping() || httpClient.isStopped()) {
             log.info("Starting HttpClient...");
             httpClient.start();
@@ -56,9 +53,6 @@ enum SmsSender implements Initializable {
     }
 
     public void sendSms(String subject, String message) {
-        if (isDisabled()) {
-            return;
-        }
         final long smsNum = smsCounter.incrementAndGet();
         final String titledMessage = subject + ":\n" + message;
         final String payload =
@@ -81,9 +75,5 @@ enum SmsSender implements Initializable {
                         log.error("SMS #{} NOT sent: {}", smsNum, result.getFailure().getMessage());
                     }
                 });
-    }
-
-    private boolean isDisabled() {
-        return PropertiesManager.ONE.getUmfSmsConfig().isDisabled();
     }
 }

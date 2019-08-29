@@ -36,6 +36,9 @@ class AppConfig {
     private String object = "Подвал";
     private int blinkDelayMs = 100;
     private int httpPort = 80;
+    private boolean playFromStartOnModeSwitch = false;
+    private boolean soundDevicesEnabled = true;
+
     private UmfConfig umf = new UmfConfig();
     private Map<DeviceType, DeviceConfig> devices = defaultDevicesConfig();
 

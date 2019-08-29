@@ -2,6 +2,7 @@ package com.e3k.fountain.webcontrol.config;
 
 import com.e3k.fountain.webcontrol.DaysWeekMap;
 import com.e3k.fountain.webcontrol.Initializable;
+import com.e3k.fountain.webcontrol.Utils;
 import com.e3k.fountain.webcontrol.constant.*;
 import com.e3k.fountain.webcontrol.io.player.PlaylistUtils;
 import com.google.gson.*;
@@ -71,7 +72,9 @@ public enum PropertiesManager implements Initializable {
     // GETTERS
 
     public String dumpAppConfig() {
-        return gson.toJson(appConfig);
+        JsonObject jsonObject = (JsonObject) gson.toJsonTree(appConfig);
+        jsonObject.addProperty("version", Utils.getAppVersion());
+        return jsonObject.toString();
     }
 
     public Map<DayOfWeek,  LocalTime> getAlarmClocks(AlarmType alarmType) {
@@ -180,6 +183,14 @@ public enum PropertiesManager implements Initializable {
 
     public UmfSmsConfig getUmfSmsConfig() {
         return appConfig.getUmf().getSms();
+    }
+
+    public boolean isPlayFromStartOnModeSwitch() {
+        return appConfig.isPlayFromStartOnModeSwitch();
+    }
+
+    public boolean isSoundDevicesEnabled() {
+        return appConfig.isSoundDevicesEnabled();
     }
 
     // SETTERS

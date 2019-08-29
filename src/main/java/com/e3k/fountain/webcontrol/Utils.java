@@ -62,4 +62,12 @@ public class Utils {
     public static boolean isRaspberry() {
         return SystemInfo.getOsName().startsWith("Linux");
     }
+
+    public static String getAppVersion() {
+        String appVersion = Utils.class.getPackage().getImplementationVersion();
+        if (appVersion == null || appVersion.isEmpty()) {
+            return "N/A";
+        }
+        return appVersion;
+    }
 }
