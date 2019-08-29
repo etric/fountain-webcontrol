@@ -5,7 +5,6 @@
   "volume": 50,
   "object": "Подвал номер 5",
   "blinkDelayMs": 100,
-  "httpPort": 9191,
   "umf": {
     "baudRate": 9600,
     "dataBits": 8,
@@ -17,13 +16,13 @@
       "username": "servicevater",
       "password": "1q2W3e4R",
       "sender": "servicevater@gmail.com",
-      "recipients": "etric1@gmail.com"
+      "recipients": "servicevater@gmail.com"
     },
     "sms": {
       "username": "380680468836",
       "password": "63rtn98",
-      "alphaName": "infomir",
-      "recipients": "380952593469"
+      "alphaName": "VashZakaz",
+      "recipients": "380680468836"
     },
     "bulbs": [
       {
@@ -33,25 +32,25 @@
         "notifyOnChange": true
       },
       {
-        "switchState": "on",
+        "switchState": "off",
         "switchLabel": "Лампа 2",
         "bulbLabel": "Лампа 2",
         "notifyOnChange": true
       },
       {
-        "switchState": "on",
+        "switchState": "off",
         "switchLabel": "Лампа 3",
         "bulbLabel": "Лампа 3",
         "notifyOnChange": true
       },
       {
-        "switchState": "on",
+        "switchState": "off",
         "switchLabel": "Лампа 4",
         "bulbLabel": "Лампа 4",
         "notifyOnChange": true
       },
       {
-        "switchState": "on",
+        "switchState": "off",
         "switchLabel": "Лампа 5",
         "bulbLabel": "Лампа 5",
         "notifyOnChange": true
@@ -64,12 +63,12 @@
       },
       {
         "switchState": "off",
-        "switchLabel": "Лампа 77",
-        "bulbLabel": "Лампа 77",
+        "switchLabel": "Лампа 7",
+        "bulbLabel": "Лампа 7",
         "notifyOnChange": true
       },
       {
-        "switchState": "on",
+        "switchState": "off",
         "switchLabel": "Лампа 8",
         "bulbLabel": "Лампа 8",
         "notifyOnChange": true
@@ -111,13 +110,13 @@
         "notifyOnChange": true
       },
       {
-        "switchState": "on",
+        "switchState": "off",
         "switchLabel": "Лампа 15",
         "bulbLabel": "Лампа 15",
         "notifyOnChange": true
       },
       {
-        "switchState": "on",
+        "switchState": "off",
         "switchLabel": "Лампа 16",
         "bulbLabel": "Лампа 16",
         "notifyOnChange": true

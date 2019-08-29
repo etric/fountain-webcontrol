@@ -76,4 +76,10 @@ enum SmsSender implements Initializable {
                     }
                 });
     }
+
+//    public static void main(String[] args) throws Exception {
+//        PropertiesManager.ONE.init();
+//        SmsSender.ONE.init();
+//        SmsSender.ONE.sendSms("TEST123-subj", "message text\nnext line");
+//    }
 }
