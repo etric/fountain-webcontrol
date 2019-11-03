@@ -6,7 +6,7 @@
 
     <groupId>com.e3k</groupId>
     <artifactId>fountain-webcontrol</artifactId>
-    <version>4.0</version>
+    <version>4.1</version>
 
     <build>
         <plugins>

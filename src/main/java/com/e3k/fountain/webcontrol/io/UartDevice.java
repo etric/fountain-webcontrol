@@ -62,7 +62,7 @@ public enum UartDevice implements Initializable {
     private void handleEvent(SerialDataEvent event) {
         try {
             byte[] data = event.getBytes();
-            if (data[0] != 'M' || data[1] != 'V' || data[2] != 'K') {
+            if (data == null || data.length < 5 || data[0] != 'M' || data[1] != 'V' || data[2] != 'K') {
                 log.error("Corrupted HEADER. Ignoring event");
                 return;
             }
