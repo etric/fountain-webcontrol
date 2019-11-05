@@ -16,7 +16,7 @@
     border-radius: 100%;
     overflow: hidden;
     /* 	border: 3.6px solid #000; */
-    background: url(../img/5R7.svg);
+    background: url(../../img/5R7.svg);
     background-size: 50px 20px;
     background-position: 0 0;
     background-repeat: repeat-x;
@@ -38,7 +38,7 @@
 }
 
 body {
-    background: url(../img/asoggetti-723668-unsplash_cropped_lower.jpg) repeat-y 0 -250px fixed !important;
+    background: url(../../img/asoggetti-723668-unsplash_cropped_lower.jpg) repeat-y 0 -250px fixed !important;
     margin-bottom: 60px; /* Margin bottom by footer height */
 }
 
@@ -111,9 +111,9 @@ body {
 
 ol.playlist {
     width: 100%;
-    height: 47vh;
-    overflow: scroll;
-    overflow-x: hidden;
+    height: 100%;
+    /*overflow: scroll;*/
+    /*overflow-x: hidden;*/
 }
 
 .pause-label {

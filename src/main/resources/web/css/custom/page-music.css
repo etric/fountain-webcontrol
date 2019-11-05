@@ -1,0 +1,29 @@
+.bulb-red {
+    color: red;
+    text-shadow: 0 0 1px #333;
+}
+
+.bulb-grn {
+    color: green;
+    text-shadow: 0 0 1px #333;
+}
+
+#title-label {
+    right: 60px;
+    top: 10px;
+    position: absolute;
+    color: #333;
+    text-shadow: 2px 1px 0 rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+}
+
+#btn-close {
+    right: 10px;
+    top: 10px;
+    position: absolute;
+}
+
+.full-width {
+    width: 100%;
+    max-width: 100%;
+}

@@ -4,16 +4,16 @@
 const INTERVAL_GET_SYS_DATE_TIME = 5000;
 const INTERVAL_GET_CURR_PLAYING = 5000;
 const INTERVAL_GET_BULB_STATES = 500;
+
 const ALL_DEVICES = [
     {techName: 'fountain', withAlarms: true},
     {techName: 'sound', withAlarms: true},
-    {techName: 'light', withAlarms: true},
-    {techName: 'auxGpio1', withAlarms: false},
-    {techName: 'auxGpio2', withAlarms: false},
-    {techName: 'auxGpio3', withAlarms: false},
-    {techName: 'auxGpio4', withAlarms: false},
-    {techName: 'auxGpio5', withAlarms: false},
-    {techName: 'auxGpio6', withAlarms: false}
+    {techName: 'light', withAlarms: true}
+];
+const PAGES = [
+    {techName: 'umf', secured: true},
+    {techName: 'settings', secured: true},
+    {techName: 'music', secured: false}
 ];
 
 const getDevices = (withAlarmsOnly, soundDevicesEnabled) => {

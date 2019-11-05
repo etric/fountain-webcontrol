@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="css/lib/bootstrap.min.css">
+    <link rel="stylesheet" href="css/lib/toastr.min.css">
+    <link rel="stylesheet" href="css/lib/fontawesome.min.css">
+    <link rel="stylesheet" href="css/lib/solid.min.css">
+    <link rel="stylesheet" href="css/lib/bootstrap4-toggle.min.css">
+    <link rel="stylesheet" href="css/custom/custom.css"/>
+    <link rel="stylesheet" href="css/custom/page-music.css"/>
+
+    <title>ИМПЕРИЯ ВОДЫ | Fountain Web Control - Музыка</title>
+
+    <style type="text/css">
+
+    </style>
+
+</head>
+<body class="m-0 bg-semi-trans">
+
+<div class="container pt-5 no-gutters full-width">
+
+    <h4 id="title-label">Музыка</h4>
+    <!--<span class="pulse"></span>-->
+    <button id="btn-close" type="button" class="btn btn-danger btn-sm" onclick="window.close();">
+        <i class="fas fa-window-close fa-lg"></i>
+    </button>
+
+    <div class="col-12 mt-2">
+        <div class="row sound-related no-gutters">
+            <div class="card mb-3 bg-semi-trans shadow col-12 col-md-6">
+                <div class="card-header p-0">
+                    <h5 class="p-2 m-0 text-center" data-toggle="collapse" data-target="#collapseMusicUpload">Загрузка
+                        новой мелодии</h5>
+                </div>
+                <!--<div class="custom-file" lang="ru">-->
+                <div id="collapseMusicUpload" class="collapse hide">
+                    <div class="card-body px-3 py-2">
+                        <div class="form-inline mb-2">
+                            <label for="music-num-selector"
+                                   class="align-self-center mr-3 mb-2"><strong>Файл</strong></label>
+                            <input type="file" id="music-file-chooser" class="mb-2" style="width: 100%" accept=".mp3">
+                        </div>
+
+                        <div class="form-inline">
+                            <label for="music-num-selector" class="align-self-center mr-3 mb-2"><strong>Мелодия
+                                #</strong></label>
+                            <select class="custom-select mr-3 mb-2" id="music-num-selector">
+                                <option selected value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                                <option value="16">16</option>
+                                <option value="17">17</option>
+                                <option value="18">18</option>
+                                <option value="19">19</option>
+                                <option value="20">20</option>
+                                <option value="21">21</option>
+                                <option value="22">22</option>
+                                <option value="23">23</option>
+                                <option value="24">24</option>
+                                <option value="25">25</option>
+                            </select>
+                            <button class="btn btn-info mb-2" id="upload-music-file">
+                                <i class="fas fa-file-upload"></i> Загрузить
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="row mb-3 mr-2">
+                    <div class="col-9 align-self-center">
+                        <h6 class="pt-2 text-right pause-label">Пауза между треками (сек)</h6>
+                    </div>
+                    <select class="col-3 form-control form-control-sm" id="pauseBetweenTracks">
+                        <!-- pause values populated dynamically -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- VOLUME -->
+            <div class="sound-related col-12 my-2 no-gutters">
+                <div class="col-12 align-self-center text-center">
+                    <h6 class="m-0"><span><strong>ГРОМКОСТЬ:&nbsp;
+                                <output style="font-size: larger" id="volumeSliderOut"
+                                        class="text-center">50</output></strong></span></h6>
+                </div>
+                <div class="input-group col-12">
+                    <input type="range" class="custom-control custom-range" id="volumeSlider"
+                           step="10" min="0" max="100" oninput="volumeSliderOut.value = volumeSlider.value">
+                </div>
+            </div>
+
+            <ol class="list-group shadow playlist col-12 mb-3">
+                <!-- playlist populated dynamically -->
+            </ol>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="js/lib/jquery-3.3.1.min.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap4-toggle.min.js"></script>
+<script src="js/lib/toastr.min.js"></script>
+<script src="js/custom/initialize.js"></script>
+<script src="js/custom/page-music.js"></script>
+
+</body>
+</html>

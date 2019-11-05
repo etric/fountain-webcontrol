@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="css/lib/bootstrap.min.css">
+    <link rel="stylesheet" href="css/lib/toastr.min.css">
+    <link rel="stylesheet" href="css/lib/fontawesome.min.css">
+    <link rel="stylesheet" href="css/lib/solid.min.css">
+    <link rel="stylesheet" href="css/custom/custom.css"/>
+    <link rel="stylesheet" href="css/custom/page-settings.css"/>
+
+    <title>ИМПЕРИЯ ВОДЫ | Fountain Web Control - Настройки</title>
+
+</head>
+<body class="m-0 bg-semi-trans">
+
+<div class="container pt-5 no-gutters full-width">
+
+    <h4 id="title-label">Настройки</h4>
+    <button id="btn-close" type="button" class="btn btn-danger btn-sm" onclick="window.close();">
+        <i class="fas fa-window-close fa-lg"></i>
+    </button>
+
+    <div class="row no-gutters">
+        <div class="col-12 col-md-6 mt-2">
+            <div class="buttons-container btn-group-toggle" data-toggle="buttons">
+                <!-- populated dynamically with 64 cells -->
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 mt-2 no-gutters">
+            <!-- MOTOR -->
+            <div class="col-12 my-2 row no-gutters">
+                <div class="col-2 text-center">
+                    <h6 class="m-0"><span><strong>M:
+                        <output id="motorSliderOut" class="text-center">50</output>
+                    </strong></span></h6>
+                </div>
+                <div class="input-group col-10">
+                    <input type="range" class="custom-control custom-range" id="motorSlider"
+                           step="1" min="1" max="100" oninput="motorSliderOut.value = motorSlider.value">
+                </div>
+            </div>
+            <!-- R(ed) -->
+            <div class="col-12 my-4 row no-gutters">
+                <div class="col-2 text-center">
+                    <h6 class="m-0" style="color:red"><span><strong>R:
+                        <output id="redSliderOut" class="text-center">50</output>
+                    </strong></span></h6>
+                </div>
+                <div class="input-group col-10">
+                    <input type="range" class="custom-control custom-range" id="redSlider"
+                           step="1" min="1" max="100" oninput="redSliderOut.value = redSlider.value">
+                </div>
+            </div>
+            <!-- G(reen) -->
+            <div class="col-12 my-4 row no-gutters">
+                <div class="col-2 text-center">
+                    <h6 class="m-0" style="color:green"><span><strong>G:
+                        <output id="greenSliderOut" class="text-center">50</output>
+                    </strong></span></h6>
+                </div>
+                <div class="input-group col-10">
+                    <input type="range" class="custom-control custom-range" id="greenSlider"
+                           step="1" min="1" max="100" oninput="greenSliderOut.value = greenSlider.value">
+                </div>
+            </div>
+            <!-- B(lue) -->
+            <div class="col-12 my-4 row no-gutters">
+                <div class="col-2 text-center">
+                    <h6 class="m-0" style="color:blue"><span><strong>B:
+                        <output id="blueSliderOut" class="text-center">50</output>
+                    </strong></span></h6>
+                </div>
+                <div class="input-group col-10">
+                    <input type="range" class="custom-control custom-range" id="blueSlider"
+                           step="1" min="1" max="100" oninput="blueSliderOut.value = blueSlider.value">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="js/lib/jquery-3.3.1.min.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/toastr.min.js"></script>
+<script src="js/custom/initialize.js"></script>
+<script src="js/custom/page-settings.js"></script>
+
+</body>
+</html>

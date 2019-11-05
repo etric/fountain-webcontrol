@@ -23,16 +23,12 @@ let initControlModeControls = (soundDevicesEnabled) => {
         success: function (data) {
             console.log('Initialized CONTROL_MODE: ' + data);
             var switchedOn = (data === 'auto');
-            $('#controlMode').bootstrapToggle(switchedOn ? 'on' : 'off');
+            $('#controlMode').prop("checked", switchedOn);
             changeAllDevicesSwitchState(switchedOn);
-            var cancelChangeControlMode = false;
-            $('#controlMode').change(function () {
+            // var cancelChangeControlMode = false;
+            $('#controlMode').click(function () {
                 var controlModeEl = $(this);
-                if (cancelChangeControlMode === true) {
-                    cancelChangeControlMode = false;
-                    return;
-                }
-                var autoMode = $(this).prop('checked');
+                var autoMode = controlModeEl.is(':checked');
                 var confirmationText = "Сменить режим на <b>" + (autoMode ? 'АВТО' : 'РУЧНОЙ') + "</b>?";
                 bootbox.confirm(confirmationText, function (result) {
                     if (result === true) {
@@ -49,8 +45,7 @@ let initControlModeControls = (soundDevicesEnabled) => {
                             }
                         });
                     } else {
-                        cancelChangeControlMode = true;
-                        controlModeEl.bootstrapToggle('toggle');
+                        controlModeEl.prop("checked", !autoMode);
                     }
                 });
             });
