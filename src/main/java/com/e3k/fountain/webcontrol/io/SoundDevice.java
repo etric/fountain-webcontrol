@@ -19,21 +19,13 @@ public enum SoundDevice implements SwitchableDevice {
 
     @Override
     public void switchState(DeviceState deviceState) {
-        switchState(deviceState, false);
-    }
-
-    public void switchState(DeviceState deviceState, boolean playFromStart) {
         if (DeviceState.on == SoundExtCtrlDevice.ONE.currentState()) {
             log.debug("Skipping user/alarm state change because of active Sound External Control");
             return;
         }
         SwitchableDevice.super.switchState(deviceState);
         if (DeviceState.on == deviceState) {
-            if (playFromStart) {
-                MusicPlayer.ONE.startPlaylistFromBegin();
-            } else {
-                MusicPlayer.ONE.startPlaylistWhereLeft();
-            }
+            MusicPlayer.ONE.startPlaylistFromBegin();
         } else {
             MusicPlayer.ONE.stopPlaying();
         }

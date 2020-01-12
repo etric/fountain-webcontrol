@@ -12,6 +12,6 @@ public class SoundStartAlarmListener implements AlarmListener {
     @Override
     public void handleAlarm(AlarmEntry alarmEntry) {
         log.info("Alarm triggered: {} -> OFF", SoundDevice.ONE);
-        SoundDevice.ONE.switchState(DeviceState.on, true);
+        SoundDevice.ONE.switchState(DeviceState.on);
     }
 }

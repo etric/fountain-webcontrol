@@ -38,11 +38,6 @@ public enum MusicPlayer implements BasicPlayerListener {
         playItem(0);
     }
 
-    public synchronized void startPlaylistWhereLeft() {
-        int lastPlayedItem = PropertiesManager.ONE.getLastPlayedItem();
-        playItem(lastPlayedItem + 1);
-    }
-
     public synchronized void reloadPlaylistItem(int techNum) {
         final int realNum = techNum + 1;
         log.info("Reloading {} playlist item", realNum);
