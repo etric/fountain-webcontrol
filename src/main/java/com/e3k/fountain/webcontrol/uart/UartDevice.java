@@ -1,11 +1,13 @@
-package com.e3k.fountain.webcontrol.io;
+package com.e3k.fountain.webcontrol.uart;
 
 import com.e3k.fountain.webcontrol.Initializable;
-import com.e3k.fountain.webcontrol.Utils;
+import com.e3k.fountain.webcontrol.CommonUtils;
 import com.e3k.fountain.webcontrol.config.PropertiesManager;
 import com.e3k.fountain.webcontrol.config.UmfBulbConfig;
 import com.e3k.fountain.webcontrol.constant.BulbState;
+import com.e3k.fountain.webcontrol.io.SoundDevice;
 import com.e3k.fountain.webcontrol.notification.NotificationSender;
+import com.e3k.fountain.webcontrol.uart.UartMessage;
 import com.pi4j.io.serial.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,13 +26,15 @@ public enum UartDevice implements Initializable {
     private final Lock handleEventLock = new ReentrantLock();
     private final BulbState[] bulbStates = new BulbState[16];
     private List<UmfBulbConfig> umfBulbs;
+    private volatile boolean curAllowSound;
 
     private Serial serial;
 
     @Override
     public synchronized void init() throws IOException, InterruptedException {
-        if (Utils.isRaspberry()) {
+        if (CommonUtils.isRaspberry()) {
 
+            curAllowSound = true;
             umfBulbs = PropertiesManager.ONE.getAllUmfBulbInfo();
 
             // by default, use the DEFAULT com port on the Raspberry Pi (exposed on GPIO header)
@@ -56,13 +60,13 @@ public enum UartDevice implements Initializable {
     }
 
     public BulbState[] getBulbStates() {
-        return this.bulbStates.clone();
+        return this.bulbStates.clone(); //TODO not clone?
     }
 
     private void handleEvent(SerialDataEvent event) {
         try {
             byte[] data = event.getBytes();
-            if (data == null || data.length < 5 || data[0] != 'M' || data[1] != 'V' || data[2] != 'K') {
+            if (data == null || data.length < 8 || data[0] != 'M' || data[1] != 'V' || data[2] != 'K') {
                 log.error("Corrupted HEADER. Ignoring event");
                 return;
             }
@@ -73,6 +77,11 @@ public enum UartDevice implements Initializable {
 //            }
 
             BulbState[] newBulbStates = extractBulbStatesFromEventData(data);
+            boolean newAllowSound = CommonUtils.isBitUp(data[5], 7);
+            if (newAllowSound != curAllowSound) {
+                SoundDevice.ONE.allowExternally(newAllowSound);
+                curAllowSound = newAllowSound;
+            }
 
             handleEventLock.lock();
             sendChangedBulbsNotification(newBulbStates);
@@ -80,7 +89,7 @@ public enum UartDevice implements Initializable {
             // save new bulb states
             System.arraycopy(newBulbStates, 0, bulbStates, 0, 16);
             // send response message
-            serial.write(PropertiesManager.ONE.getUartUserMessage());
+            serial.write(UartMessage.ONE.getBytes());
         }
         catch (Exception e) {
             log.error("Error during UART event processing", e);

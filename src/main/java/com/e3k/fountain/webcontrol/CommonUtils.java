@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
  *
  * @author Alexander 'etric' Khamylov
  */
-public class Utils {
+public class CommonUtils {
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -34,12 +34,6 @@ public class Utils {
         if (deviceType == DeviceType.fountain) return FountainDevice.ONE;
         if (deviceType == DeviceType.sound) return SoundDevice.ONE;
         if (deviceType == DeviceType.light) return LightDevice.ONE;
-        if (deviceType == DeviceType.auxGpio1) return AuxGpio1Device.ONE;
-        if (deviceType == DeviceType.auxGpio2) return AuxGpio2Device.ONE;
-        if (deviceType == DeviceType.auxGpio3) return AuxGpio3Device.ONE;
-        if (deviceType == DeviceType.auxGpio4) return AuxGpio4Device.ONE;
-        if (deviceType == DeviceType.auxGpio5) return AuxGpio5Device.ONE;
-        if (deviceType == DeviceType.auxGpio6) return AuxGpio6Device.ONE;
         throw new IllegalArgumentException("Unknown device type " + deviceType);
     }
 
@@ -64,10 +58,23 @@ public class Utils {
     }
 
     public static String getAppVersion() {
-        String appVersion = Utils.class.getPackage().getImplementationVersion();
+        String appVersion = CommonUtils.class.getPackage().getImplementationVersion();
         if (appVersion == null || appVersion.isEmpty()) {
             return "N/A";
         }
         return appVersion;
+    }
+
+    public static byte setOrUnsetBit(byte val, int bitNum, boolean setBit) {
+        bitNum = bitNum % 8;
+        if (!setBit) {
+            return (byte) (val & ~(1 << bitNum));
+        } else {
+            return (byte) (val | (1 << bitNum));
+        }
+    }
+
+    public static boolean isBitUp(byte val, int bitNum) {
+        return (val & (1 << bitNum)) > 0;
     }
 }

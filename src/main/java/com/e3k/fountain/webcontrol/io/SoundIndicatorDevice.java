@@ -1,20 +1,30 @@
 package com.e3k.fountain.webcontrol.io;
 
-import com.e3k.fountain.webcontrol.constant.DeviceType;
+import com.e3k.fountain.webcontrol.ValidationUtils;
+import com.e3k.fountain.webcontrol.uart.UartMessage;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 
 @Slf4j
-public enum SoundIndicatorDevice implements SwitchableDevice {
+public enum SoundIndicatorDevice {
     ONE;
 
-    @Override
-    public DeviceType getType() {
-        return DeviceType.soundIndicator;
+    SoundIndicatorDevice() {
+        setStopped();
     }
 
-    @Override
-    public Logger getLogger() {
-        return log;
+    public void setPlayingItem(int itemNum) {
+        ValidationUtils.requireInRange(itemNum, 0, 24, "playingItem");
+        UartMessage.ONE.setPauseState(false);
+        UartMessage.ONE.setCurrPlayingItem(itemNum + 1);
+    }
+
+    //TODO CLARIFY! pass 0 or 1? On pause or when stopped?
+    public void setPausing() {
+        UartMessage.ONE.setPauseState(true);
+    }
+
+    public void setStopped() {
+        UartMessage.ONE.setPauseState(false);
+        UartMessage.ONE.setCurrPlayingItem(0);
     }
 }

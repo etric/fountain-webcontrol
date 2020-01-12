@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Getter
-class UmfConfig {
+public class UmfConfig {
 
     private int baudRate = 38400;
     private int dataBits = 8;

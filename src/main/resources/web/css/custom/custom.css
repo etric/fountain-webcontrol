@@ -129,3 +129,8 @@ ol.playlist {
     left: 0;
     font-size: 8pt;
 }
+
+.device-on {
+    background-color: rgba(255, 0, 0, 0.3) !important;
+    color: white !important;
+}

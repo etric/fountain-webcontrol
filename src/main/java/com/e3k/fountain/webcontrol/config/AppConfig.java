@@ -1,6 +1,6 @@
 package com.e3k.fountain.webcontrol.config;
 
-import com.e3k.fountain.webcontrol.Utils;
+import com.e3k.fountain.webcontrol.CommonUtils;
 import com.e3k.fountain.webcontrol.constant.ControlMode;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
 import lombok.AccessLevel;
@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.e3k.fountain.webcontrol.Utils.daysWeekMap;
+import static com.e3k.fountain.webcontrol.CommonUtils.daysWeekMap;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toMap;
 
@@ -28,7 +28,7 @@ class AppConfig {
     private int pauseBetweenTracks = 0;
 
     @Setter(AccessLevel.PACKAGE)
-    private int lastPlayedItem = -1;
+    private int lastPlayedItem = 0;
 
     @Setter(AccessLevel.PACKAGE)
     private int volume = 50;
@@ -40,11 +40,12 @@ class AppConfig {
     private boolean soundDevicesEnabled = true;
 
     private UmfConfig umf = new UmfConfig();
+    private SettingsConfig settings = new SettingsConfig();
     private Map<DeviceType, DeviceConfig> devices = defaultDevicesConfig();
 
     private static Map<DeviceType, DeviceConfig> defaultDevicesConfig() {
         return Stream.of(DeviceType.values()).collect(toMap(identity(), type ->
-            Utils.isAlarmable(type)
+            CommonUtils.isAlarmable(type)
                     ? new DeviceConfig(type, daysWeekMap(DEFAULT_ALARM_START), daysWeekMap(DEFAULT_ALARM_END))
                     : new DeviceConfig(type)
         ));

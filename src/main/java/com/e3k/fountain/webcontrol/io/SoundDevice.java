@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 public enum SoundDevice implements SwitchableDevice {
     ONE;
 
+    private volatile boolean allowExternally = true;
+
     @Override
     public DeviceState currentState() {
         //TODO keep in mind this hack (relying on player?)
@@ -23,8 +25,11 @@ public enum SoundDevice implements SwitchableDevice {
     }
 
     public void switchState(DeviceState deviceState, boolean playFromStart) {
-        if (DeviceState.on == SoundExtCtrlDevice.ONE.currentState()) {
+        if (DeviceState.off == SoundExtCtrlDevice.ONE.currentState()) {
             log.debug("Skipping user/alarm state change because of active Sound External Control");
+            return;
+        }
+        if (isForceOff()) {
             return;
         }
         SwitchableDevice.super.switchState(deviceState);
@@ -52,5 +57,10 @@ public enum SoundDevice implements SwitchableDevice {
     @Override
     public Logger getLogger() {
         return log;
+    }
+
+    public void allowExternally(boolean allowExternally) {
+        this.allowExternally = allowExternally;
+        //TODO on/off sound
     }
 }

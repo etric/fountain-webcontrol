@@ -6,4 +6,8 @@ public enum DeviceState {
     public static DeviceState fromBool(boolean val) {
         return val ? on : off;
     }
+
+    public boolean toBool() {
+        return this == on;
+    }
 }

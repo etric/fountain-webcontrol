@@ -1,8 +1,8 @@
 {
-  "controlMode": "manual",
+  "controlMode": "auto",
   "pauseBetweenTracks": 2,
-  "lastPlayedItem": -1,
-  "volume": 50,
+  "lastPlayedItem": 0,
+  "volume": 20,
   "object": "Подвал номер 5",
   "blinkDelayMs": 100,
   "httpPort": 9191,
@@ -126,6 +126,78 @@
       }
     ]
   },
+  "settings": {
+    "auxButtons": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      true,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ],
+    "motor": 61,
+    "red": 31,
+    "green": 115,
+    "blue": 176
+  },
   "devices": {
     "light": {
       "state": "off",
@@ -165,43 +237,13 @@
       },
       "alarmsEnd": {
         "MONDAY": "18:00",
-        "TUESDAY": "18:00",
+        "TUESDAY": "20:05",
         "WEDNESDAY": "18:00",
         "THURSDAY": "18:00",
         "FRIDAY": "18:00",
         "SATURDAY": "18:00",
         "SUNDAY": "18:00"
       }
-    },
-    "auxGpio2": {
-      "state": "off",
-      "pin": 2,
-      "label": "auxGpio2"
-    },
-    "soundFreqGen": {
-      "state": "off",
-      "pin": 3,
-      "label": "soundFreqGen"
-    },
-    "auxGpio1": {
-      "state": "off",
-      "pin": 4,
-      "label": "auxGpio1"
-    },
-    "auxGpio3": {
-      "state": "off",
-      "pin": 5,
-      "label": "auxGpio3"
-    },
-    "soundExtCtrl": {
-      "state": "off",
-      "pin": 6,
-      "label": "soundExtCtrl"
-    },
-    "auxGpio5": {
-      "state": "off",
-      "pin": 7,
-      "label": "auxGpio5"
     },
     "sound": {
       "state": "off",
@@ -225,21 +267,6 @@
         "SATURDAY": "18:00",
         "SUNDAY": "18:00"
       }
-    },
-    "auxGpio6": {
-      "state": "off",
-      "pin": 9,
-      "label": "auxGpio6"
-    },
-    "soundIndicator": {
-      "state": "off",
-      "pin": 10,
-      "label": "soundIndicator"
-    },
-    "auxGpio4": {
-      "state": "off",
-      "pin": 11,
-      "label": "auxGpio4"
     }
   }
 }

@@ -8,7 +8,7 @@ let initDeviceControls = (soundDevicesEnabled) => {
         const {label, pin, techName, withAlarms} = completeDeviceData;
 
         let html =
-            '                <div class="shadow mb-2 px-3 card bg-semi-trans">' +
+            '                <div class="shadow mb-2 px-3 card bg-semi-trans" id="' + techName + '-device-container">' +
             '                    <div class="row pb-3">' +
             '                        <div class="col-4 col-md-2 mt-3 pr-0 align-self-center">' +
             '                            <h6 class="m-0 text-truncate" style="font-size:1rem;line-height:1.3rem;"><span>' + label + '</span></h6>' +
@@ -103,4 +103,38 @@ let initDeviceControls = (soundDevicesEnabled) => {
         },
         error: (jqXHR, textStatus, errorThrown) => console.log(textStatus, errorThrown)
     });
+
+    //init lazy
+    let devRealStates  = {
+        'fountain' : false,
+        'light' : false,
+        'sound' : false
+    };
+
+    const getDeviceStateUpdates = () => {
+        $.ajax({
+            type: "GET",
+            url: '/api/device/realStates',
+            // async: false, //TODO KEEP AN EYE ON THIS!!!
+            success: (response) => {
+                const data = JSON.parse(response);
+                for (let device in data) {
+                    let oldState = devRealStates[device];
+                    let newState = data[device];
+                    if (newState !== oldState) {
+                        let elem = $("#" + device + "-device-container");
+                        if (newState === false) {
+                            elem.removeClass("device-on");
+                        } else {
+                            elem.addClass("device-on");
+                        }
+                        devRealStates[device] = newState;
+                    }
+                }
+            },
+            error: (jqXHR, textStatus, errorThrown) => console.log(textStatus, errorThrown)
+        });
+    };
+    // getDeviceStateUpdates();
+    setInterval(getDeviceStateUpdates, INTERVAL_GET_DEVICE_STATES);
 };

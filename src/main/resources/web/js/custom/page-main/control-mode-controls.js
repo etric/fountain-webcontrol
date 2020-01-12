@@ -22,18 +22,17 @@ let initControlModeControls = (soundDevicesEnabled) => {
         url: '/api/mode',
         success: function (data) {
             console.log('Initialized CONTROL_MODE: ' + data);
-            var switchedOn = (data === 'auto');
-            $('#controlMode').prop("checked", switchedOn);
-            changeAllDevicesSwitchState(switchedOn);
-            // var cancelChangeControlMode = false;
-            $('#controlMode').click(function () {
-                var controlModeEl = $(this);
-                var autoMode = controlModeEl.is(':checked');
+            $("input[name='controlMode'][value='" + data + "']").prop('checked', true);
+            // var switchedOn = (data === 'auto');
+            var controlModeElem = $("input[type='radio'][name='controlMode']");
+            controlModeElem.on('change', function() {
+                var autoMode = $(this).val() === 'auto';
                 var confirmationText = "Сменить режим на <b>" + (autoMode ? 'АВТО' : 'РУЧНОЙ') + "</b>?";
+
                 bootbox.confirm(confirmationText, function (result) {
                     if (result === true) {
                         console.log('CONTROL MODE CHANGED: AUTO? ' + autoMode);
-                        changeAllDevicesSwitchState(autoMode);
+                        // changeAllDevicesSwitchState(autoMode);
                         $.ajax({
                             type: "PUT",
                             url: '/api/mode/' + (autoMode ? 'auto' : 'manual'),
@@ -45,10 +44,39 @@ let initControlModeControls = (soundDevicesEnabled) => {
                             }
                         });
                     } else {
-                        controlModeEl.prop("checked", !autoMode);
+                        var revertedMode = autoMode ? 'manual' : 'auto';
+                        $("input[name='controlMode'][value='" + revertedMode + "']").prop('checked', true);
                     }
                 });
+
             });
+
+            // changeAllDevicesSwitchState(switchedOn);
+            // // var cancelChangeControlMode = false;
+            // $('#controlMode').click(function () {
+            //     var controlModeEl = $(this);
+            //     var autoMode = controlModeEl.is(':checked');
+            //     var confirmationText = "Сменить режим на <b>" + (autoMode ? 'АВТО' : 'РУЧНОЙ') + "</b>?";
+            //     bootbox.confirm(confirmationText, function (result) {
+            //         if (result === true) {
+            //             console.log('CONTROL MODE CHANGED: AUTO? ' + autoMode);
+            //             changeAllDevicesSwitchState(autoMode);
+            //             $.ajax({
+            //                 type: "PUT",
+            //                 url: '/api/mode/' + (autoMode ? 'auto' : 'manual'),
+            //                 success: function (response) {
+            //                     toastr.success('Режим ' + (autoMode ? 'АВТО' : 'РУЧНОЙ') + ' установлен!');
+            //                 },
+            //                 error: function (jqXHR, textStatus, errorThrown) {
+            //                     toastr.error('Режим ' + (autoMode ? 'АВТО' : 'РУЧНОЙ') + ' не установлен: ' + jqXHR.responseText);
+            //                 }
+            //             });
+            //         } else {
+            //             controlModeEl.prop("checked", !autoMode);
+            //         }
+            //     });
+            // });
+            //
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);

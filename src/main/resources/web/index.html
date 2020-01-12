@@ -45,21 +45,63 @@
 
         <div class="col-12" id="myControls">
             <div>
-                <div class="row">
-                    <div class="col-8 input-group justify-content-start">
-                        <!--<div class="align-self-center">-->
-                            <!--<h6 class="m-0 pr-3 text-center"><span>РЕЖИМ</span></h6>-->
-                        <!--</div>-->
+                <div class="font-weight-bold">
 
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="controlMode">
-                            <label class="custom-control-label" for="controlMode"><b>РЕЖИМ АВТО</b></label>
-                        </div>
+                    <!--<h6 class="font-weight-bold mr-2 col-4">РЕЖИМ:</h6>-->
+                    <!--<div class="custom-control custom-radio custom-control-inline col-4">-->
+                        <!--<input type="radio" id="controlModeManual" name="controlMode" class="custom-control-input">-->
+                        <!--<label class="custom-control-label font-weight-bold" for="controlModeManual">РУЧНОЙ</label>-->
+                    <!--</div>-->
+                    <!--<div class="custom-control custom-radio custom-control-inline col-4">-->
+                        <!--<input type="radio" id="controlModeAuto" name="controlMode" class="custom-control-input">-->
+                        <!--<label class="custom-control-label font-weight-bold" for="controlModeAuto">АВТО</label>-->
+                    <!--</div>-->
 
+                    <span class="mr-3" style="color:#555">РЕЖИМ: </span>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="controlModeManual" name="controlMode" value="manual">
+                        <label class="custom-control-label" for="controlModeManual">РУЧНОЙ</label>
                     </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" class="custom-control-input" id="controlModeAuto" name="controlMode" value="auto">
+                        <label class="custom-control-label" for="controlModeAuto">АВТО</label>
+                    </div>
+
+
+                    <!--<div class="form-check-inline mr-2">-->
+                        <!--<label class="form-check-label" style="color:#555">РЕЖИМ:</label>-->
+                    <!--</div>-->
+                    <!--<div class="form-check-inline mr-2">-->
+                        <!--<label class="form-check-label">-->
+                            <!--<input type="radio" class="form-check-input" name="controlMode">-->
+                            <!--&lt;!&ndash;<input type="radio" id="controlModeManual" name="controlMode" class="custom-control-input">&ndash;&gt;-->
+                            <!--РУЧНОЙ-->
+                        <!--</label>-->
+                    <!--</div>-->
+                    <!--<div class="form-check-inline">-->
+                        <!--<label class="form-check-label">-->
+                            <!--<input type="radio" class="form-check-input" name="controlMode">-->
+                            <!--&lt;!&ndash;<input type="radio" id="controlModeAuto" name="controlMode" class="custom-control-input">&ndash;&gt;-->
+                            <!--АВТО-->
+                        <!--</label>-->
+                    <!--</div>-->
+
+                    <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<h6 class=" mr-2 col-4">РЕЖИМ:</h6>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="custom-control custom-radio custom-control-inline col-4 float-left">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<input type="radio" id="controlModeManual" name="controlMode" class="custom-control-input">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<label class="custom-control-label font-weight-bold" for="controlModeManual">РУЧНОЙ</label>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="custom-control custom-radio custom-control-inline col-4 float-left">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<input type="radio" id="controlModeAuto" name="controlMode" class="custom-control-input">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<label class="custom-control-label font-weight-bold" for="controlModeAuto">АВТО</label>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+                    <!--</div>-->
                 </div>
 
-                <div class="shadow mt-3 mb-2 px-3 card bg-semi-trans">
+                <div class="shadow mt-2 mb-2 px-3 card bg-semi-trans">
                     <div class="row pb-3">
                         <div class="col-8 offset-md-2 col-md-2 mt-3 pr-2 align-self-center text-center">
                             <h5 class="m-0" style="font-size:1rem"><span><strong>Выбрать день</strong></span></h5>

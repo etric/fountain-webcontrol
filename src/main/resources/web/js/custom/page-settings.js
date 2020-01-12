@@ -6,13 +6,17 @@ $(document).ready(() => {
 
     const BUTTONS_COUNT = 64;
 
-    const initButtons = () => {
+    const initButtons = (states) => {
         const cnt = $('.buttons-container');
         for (let i = 0; i < BUTTONS_COUNT; i++) {
-            cnt.append(
-                '<div class="button-item btn btn-secondary">' +
-                '<input class="auxBtn" data-auxBtn-num="' + i + '" type="checkbox">' + i +
-                '</div>');
+            let isChecked = states[i] === true;
+            let btnHtml =
+                '<div class="button-item btn btn-secondary ' + (isChecked ? 'active' : '') + '">' +
+                '<input class="auxBtn" data-auxBtn-num="' + i + '" type="checkbox" ' + (isChecked ? 'checked' : '') + '>' + i +
+                '</div>';
+            cnt.append(btnHtml);
+            console.log(btnHtml);
+            console.log('');
         }
         $('input.auxBtn:checkbox').change(
             function(){
@@ -32,6 +36,17 @@ $(document).ready(() => {
 
             });
     };
+
+    $.ajax({
+        type: "GET",
+        url: '/api/settings/auxButtons',
+        success: (data) => {
+            console.log('AuxButtons: ' + data);
+            const auxButtonStates = JSON.parse(data);
+            initButtons(auxButtonStates);
+        },
+        error: (jqXHR, textStatus, errorThrown) => console.log(textStatus, errorThrown)
+    });
 
     const initSlider = (techName) => {
         const sliderName = techName + 'Slider';
@@ -63,7 +78,6 @@ $(document).ready(() => {
         });
     };
 
-    initButtons();
 
     ['motor', 'red', 'green', 'blue']
         .forEach(techName => initSlider(techName));

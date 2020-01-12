@@ -2,28 +2,25 @@ package com.e3k.fountain.webcontrol.config;
 
 import com.e3k.fountain.webcontrol.DaysWeekMap;
 import com.e3k.fountain.webcontrol.Initializable;
-import com.e3k.fountain.webcontrol.Utils;
-import com.e3k.fountain.webcontrol.constant.*;
+import com.e3k.fountain.webcontrol.constant.AlarmType;
+import com.e3k.fountain.webcontrol.constant.ControlMode;
+import com.e3k.fountain.webcontrol.constant.DeviceState;
+import com.e3k.fountain.webcontrol.constant.DeviceType;
 import com.e3k.fountain.webcontrol.io.player.PlaylistUtils;
-import com.google.gson.*;
+import com.e3k.fountain.webcontrol.uart.UartMessage;
 import com.pi4j.io.serial.*;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.e3k.fountain.webcontrol.config.ConfigUtils.*;
-import static com.e3k.fountain.webcontrol.config.ConfigValidator.validate;
+import static com.e3k.fountain.webcontrol.config.ConfigUtils.alarmsConfigByAlarmType;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -36,34 +33,11 @@ public enum PropertiesManager implements Initializable {
 
     ONE;
 
-    private final byte[] uartUserMessage = new byte[] {0, 0, 0, 0, 0, 0, 0, 0}; //3,4-data
-
-    private final Gson gson = buildGson();
-    private final File configFile = new File("config.json");
     private AppConfig appConfig;
 
     @Override
     public synchronized void init() {
-        if (appConfig == null) {
-            loadConfig();
-            log.info("Validating Config...");
-            validate(this.appConfig);
-            initUartUserMessage();
-        }
-    }
-
-    private void initUartUserMessage() {
-        uartUserMessage[0] = 'M';
-        uartUserMessage[1] = 'V';
-        uartUserMessage[2] = 'K';
-        for (int i = 0; i < 16; i++) {
-            boolean setBit = appConfig.getUmf().getBulbs().get(i).getSwitchState() == DeviceState.on;
-            if (i < 8) {
-                uartUserMessage[3] = setOrUnsetBit(uartUserMessage[3], i, setBit);
-            } else {
-                uartUserMessage[4] = setOrUnsetBit(uartUserMessage[4], i, setBit);
-            }
-        }
+        appConfig = ConfigIO.ONE.loadConfig();
     }
 
     // GETTERS
@@ -72,9 +46,7 @@ public enum PropertiesManager implements Initializable {
     // GETTERS
 
     public String dumpAppConfig() {
-        JsonObject jsonObject = (JsonObject) gson.toJsonTree(appConfig);
-        jsonObject.addProperty("version", Utils.getAppVersion());
-        return jsonObject.toString();
+        return ConfigIO.ONE.dumpConfig();
     }
 
     public Map<DayOfWeek,  LocalTime> getAlarmClocks(AlarmType alarmType) {
@@ -87,8 +59,7 @@ public enum PropertiesManager implements Initializable {
         return appConfig.getControlMode();
     }
 
-    public DeviceState getDeviceManualState(DeviceType deviceType) {
-        requireNonNull(deviceType);
+    public DeviceState getDeviceManualState(@NonNull DeviceType deviceType) {
         return appConfig.getDevices().get(deviceType).getState();
     }
 
@@ -104,8 +75,7 @@ public enum PropertiesManager implements Initializable {
         return appConfig.getPauseBetweenTracks();
     }
 
-    public int getDevicePin(DeviceType deviceType) {
-        requireNonNull(deviceType);
+    public int getDevicePin(@NonNull DeviceType deviceType) {
         return appConfig.getDevices().get(deviceType).getPin();
     }
 
@@ -173,10 +143,6 @@ public enum PropertiesManager implements Initializable {
         return appConfig.getObject();
     }
 
-    public byte[] getUartUserMessage() {
-        return uartUserMessage.clone();
-    }
-
     public List<UmfBulbConfig> getAllUmfBulbInfo() {
         return Collections.unmodifiableList(appConfig.getUmf().getBulbs());
     }
@@ -198,45 +164,35 @@ public enum PropertiesManager implements Initializable {
     // SETTERS
     // SETTERS
 
-    public synchronized void setAlarmClock(AlarmType alarmType, DayOfWeek dayOfWeek, LocalTime time) {
-        requireNonNull(alarmType);
+    public synchronized void setAlarmClock(@NonNull AlarmType alarmType, DayOfWeek dayOfWeek, LocalTime time) {
         if (dayOfWeek != null && time != null) {
             alarmsConfigByAlarmType(appConfig.getDevices(), alarmType).put(dayOfWeek, time);
-            storeConfig();
         }
     }
 
-    public synchronized void setControlMode(ControlMode controlMode) {
-        requireNonNull(controlMode);
+    public synchronized void setControlMode(@NonNull ControlMode controlMode) {
         appConfig.setControlMode(controlMode);
-        storeConfig();
     }
 
-    public synchronized void setDeviceManualState(DeviceType deviceType, DeviceState deviceState) {
-        requireNonNull(deviceType);
-        requireNonNull(deviceState);
+    public synchronized void setDeviceManualState(@NonNull DeviceType deviceType, @NonNull DeviceState deviceState) {
         appConfig.getDevices().get(deviceType).setState(deviceState);
-        storeConfig();
     }
 
     public synchronized void setLastPlayedItem(int lastPlayedItem) {
         if (PlaylistUtils.isValidMusicNum(lastPlayedItem)) {
             appConfig.setLastPlayedItem(lastPlayedItem);
-            storeConfig();
         }
     }
 
     public synchronized void setVolume(int volume) {
         if (volume > 0 && volume <= 100) {
             appConfig.setVolume(volume);
-            storeConfig();
         }
     }
 
     public synchronized void setPauseBetweenTracks(int pauseBetweenTracks) {
         if (pauseBetweenTracks >= 0 && pauseBetweenTracks <= 300) {
             appConfig.setPauseBetweenTracks(pauseBetweenTracks);
-            storeConfig();
         }
     }
 
@@ -245,51 +201,15 @@ public enum PropertiesManager implements Initializable {
         if (bulbNum >= 0 && bulbNum < 16) {
             appConfig.getUmf().getBulbs().get(bulbNum).setSwitchState(switchState);
             boolean setBit = switchState == DeviceState.on;
-            if (bulbNum < 8) {
-                uartUserMessage[3] = setOrUnsetBit(uartUserMessage[3], bulbNum, setBit);
-            } else {
-                uartUserMessage[4] = setOrUnsetBit(uartUserMessage[4], bulbNum, setBit);
-            }
-            storeConfig();
+            UartMessage.ONE.setUmfBulb(bulbNum, setBit);
         }
     }
 
-    // IO
-    // IO
-    // IO
-    // IO
-
-    private void storeConfig() {
-        final Logger log = LoggerFactory.getLogger(PropertiesManager.class);
-        try (Writer propsOut = new FileWriter(configFile)) {
-            gson.toJson(appConfig, propsOut);
-            log.trace("Properties successfully stored");
-        } catch (IOException ex) {
-            log.error("Failed storing properties", ex);
-        }
+    public SettingsConfig getSettingsConfig() {
+        return appConfig.getSettings();
     }
 
-    private void loadConfig() {
-        log.info("Loading config from {}", configFile.getName());
-        if (configFile.exists()) {
-            try (Reader reader = Files.newBufferedReader(configFile.toPath(), Charset.forName("UTF-8"))) {
-                appConfig = gson.fromJson(reader, AppConfig.class);
-                if (appConfig != null) {
-                    log.info("Config successfully loaded");
-                    return;
-                }
-            } catch (IOException ex) {
-                log.error("Failed loading config from file", ex);
-            }
-        } else {
-            try {
-                configFile.createNewFile();
-            } catch (IOException ex) {
-                log.error("Failed creating config file", ex);
-            }
-        }
-        log.warn("Storing default config as a template");
-        appConfig = new AppConfig();
-        storeConfig();
+    public UmfConfig getUmfConfig() {
+        return appConfig.getUmf();
     }
 }

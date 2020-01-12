@@ -1,6 +1,6 @@
 package com.e3k.fountain.webcontrol.config;
 
-import com.e3k.fountain.webcontrol.Utils;
+import com.e3k.fountain.webcontrol.CommonUtils;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
 import com.e3k.fountain.webcontrol.io.player.PlaylistUtils;
 import com.pi4j.io.serial.*;
@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static com.e3k.fountain.webcontrol.config.ConfigUtils.*;
+import static com.e3k.fountain.webcontrol.ValidationUtils.*;
 import static java.util.Objects.requireNonNull;
 
 @UtilityClass
@@ -38,7 +38,7 @@ class ConfigValidator {
     private static void validateUmf(AppConfig appConfig) {
         requireNonNull(appConfig.getUmf(), "umf");
         requireNonNull(appConfig.getUmf().getPassword(), "umf.password");
-        if (Utils.isRaspberry()) {
+        if (CommonUtils.isRaspberry()) {
             requireNonNull(Baud.getInstance(appConfig.getUmf().getBaudRate()), "umf.baudRate");
             requireNonNull(DataBits.getInstance(appConfig.getUmf().getDataBits()), "umf.dataBits");
             requireNonNull(Parity.getInstance(appConfig.getUmf().getParity()), "umf.parity");
@@ -82,7 +82,7 @@ class ConfigValidator {
             requireInRange(devCfg.getPin(), 0, 31, type + ".pin");
             requireNonNull(devCfg.getState(), type + ".state");
             requireNonNull(devCfg.getLabel(), type + ".label");
-            if (Utils.isAlarmable(type)) {
+            if (CommonUtils.isAlarmable(type)) {
                 requireNonNull(devCfg.getAlarmsStart(), type + ".alarmsStart");
                 requireNonNull(devCfg.getAlarmsEnd(), type + ".alarmsEnd");
                 Stream.of(DayOfWeek.values()).forEach(dow -> {

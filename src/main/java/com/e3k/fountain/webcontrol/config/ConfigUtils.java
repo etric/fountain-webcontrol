@@ -1,28 +1,25 @@
 package com.e3k.fountain.webcontrol.config;
 
 import com.e3k.fountain.webcontrol.DaysWeekMap;
-import com.e3k.fountain.webcontrol.Utils;
+import com.e3k.fountain.webcontrol.CommonUtils;
 import com.e3k.fountain.webcontrol.constant.AlarmType;
 import com.e3k.fountain.webcontrol.constant.DeviceType;
 import com.google.gson.*;
 import lombok.experimental.UtilityClass;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
 import java.time.LocalTime;
 import java.util.Map;
-import java.util.Objects;
 
 @UtilityClass
-class ConfigUtils {
+public class ConfigUtils {
 
     static Gson buildGson() {
         return new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalTime.class, (JsonSerializer<LocalTime>)
-                        (localTime, t, c) -> new JsonPrimitive(Utils.timeToString(localTime)))
+                        (localTime, t, c) -> new JsonPrimitive(CommonUtils.timeToString(localTime)))
                 .registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>)
-                        (jsonEl, t, c) -> Utils.stringToTime(jsonEl.getAsString()))
+                        (jsonEl, t, c) -> CommonUtils.stringToTime(jsonEl.getAsString()))
                 .create();
     }
 
@@ -41,46 +38,6 @@ class ConfigUtils {
             return devices.get(DeviceType.sound).getAlarmsEnd();
         } else {
             throw new IllegalArgumentException("Unsupported alarm type " + alarmType);
-        }
-    }
-
-    static void requireInRange(int target, int min, int max, String msg) {
-        if (target < min || target > max) {
-            throw new IllegalArgumentException(msg + ": " + target +
-                    " is not in range [" + min + ".." + max + "]");
-        }
-    }
-
-    static void requireState(boolean state, String msg) {
-        if (!state) {
-            throw new IllegalArgumentException(msg);
-        }
-    }
-
-    static void requireAddress(String address, String msg) {
-        Objects.requireNonNull(address, msg);
-        try {
-            new InternetAddress(address);
-        } catch (AddressException e) {
-            throw new IllegalArgumentException(msg + ": " + address + " has invalid address");
-        }
-    }
-
-    static void requireUaPhones(String phones, String msg) {
-        Objects.requireNonNull(phones, msg);
-        for (String phone : phones.split("[,;]")) {
-            if (!phone.matches("380\\d{9}")) {
-                throw new IllegalArgumentException(msg + ": " + phone + " - invalid UA phone number(s)");
-            }
-        }
-    }
-
-    static byte setOrUnsetBit(byte val, int bitNum, boolean setBit) {
-        bitNum = bitNum % 8;
-        if (!setBit) {
-            return (byte) (val & ~(1 << bitNum));
-        } else {
-            return (byte) (val | (1 << bitNum));
         }
     }
 }

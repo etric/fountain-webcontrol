@@ -15,12 +15,12 @@ let initAlarmControls = (soundDevicesEnabled) => {
         return d;
     };
 
-    let initAlarmTimePicker = (alarmType) => {
+    let initAlarmTimePicker = (deviceTechName, alarmType) => {
 
-        // The hack to forbid updating alarms in 'manual' mode
+        // The hack to forbid updating alarms if device state is off
         $('#' + alarmType).on('focus click', e => {
-            let autoMode = $('#controlMode').prop('checked');
-            if (autoMode !== true) {
+            let deviceStateOn = $('#' + deviceTechName + 'State').prop('checked');
+            if (deviceStateOn) {
                 // e.preventDefault();
                 // e.stopPropagation();
                 e.stopImmediatePropagation();
@@ -119,8 +119,8 @@ let initAlarmControls = (soundDevicesEnabled) => {
         let alarmStartType = deviceInfo.techName + 'AlarmStart';
         let alarmEndType = deviceInfo.techName + 'AlarmEnd';
         let alarmDay = deviceInfo.techName + 'AlarmDay';
-        let alarmStartPicker = initAlarmTimePicker(alarmStartType);
-        let alarmEndPicker = initAlarmTimePicker(alarmEndType);
+        let alarmStartPicker = initAlarmTimePicker(deviceInfo.techName, alarmStartType);
+        let alarmEndPicker = initAlarmTimePicker(deviceInfo.techName, alarmEndType);
         $('#' + alarmStartType).change(alarmChanged);
         $('#' + alarmEndType).change(alarmChanged);
         $('#' + alarmDay).change(alarmDayChanged);

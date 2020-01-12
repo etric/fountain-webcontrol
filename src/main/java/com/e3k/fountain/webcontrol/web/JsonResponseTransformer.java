@@ -3,7 +3,9 @@ package com.e3k.fountain.webcontrol.web;
 import com.google.gson.Gson;
 import spark.ResponseTransformer;
 
-public class JsonResponseTransformer implements ResponseTransformer {
+public enum JsonResponseTransformer implements ResponseTransformer {
+
+    ONE;
 
     private final Gson gson = new Gson();
 

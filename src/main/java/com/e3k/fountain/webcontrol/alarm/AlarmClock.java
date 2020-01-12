@@ -173,7 +173,7 @@ public enum AlarmClock implements Initializable {
 
         return Collections.unmodifiableMap(map);
     }
-
+//TODO
     public void reSyncDeviceStateWithAlarms(SwitchableDevice device) {
         DayOfWeek todayDayOfWeek = LocalDate.now().getDayOfWeek();
         DeviceState alarmDeviceState = DeviceState.fromBool(isAlarmActive(todayDayOfWeek, device.getType()));
